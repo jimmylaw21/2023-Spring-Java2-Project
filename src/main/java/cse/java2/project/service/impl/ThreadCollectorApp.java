@@ -1,8 +1,7 @@
-package cse.java2.project.service;
+package cse.java2.project.service.impl;
 
 import cse.java2.project.domain.model.dto.Answer;
 import cse.java2.project.domain.model.dto.Comment;
-import cse.java2.project.domain.model.dto.Question;
 import cse.java2.project.domain.model.dto.StackOverflowThread;
 
 import java.io.IOException;
