@@ -16,9 +16,9 @@ public interface DataAnalyzer {
   double getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes();
 
   // Tags
-  Map<String, Integer> getFrequentTagsWithJava();
-  Map<String, Integer> getMostUpvotedTagsOrTagCombinations();
-  Map<String, Integer> getMostViewedTagsOrTagCombinations();
+  Map<String, Integer> getFrequentTagsWithJava(); //词云
+  Map<String, Integer> getMostUpvotedTagsOrTagCombinations(); //词饼
+  Map<String, Integer> getMostViewedTagsOrTagCombinations();  //词饼
 
   // Users
   Map<Integer, Integer> getDistributionOfUserParticipation();

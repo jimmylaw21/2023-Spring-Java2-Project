@@ -14,7 +14,7 @@ public class MainController {
    */
   @GetMapping({"/", "/demo"})
   public String demo() {
-    return "demo";
+    return "index";
   }
 
 }
