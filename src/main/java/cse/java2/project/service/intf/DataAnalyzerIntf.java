@@ -3,7 +3,7 @@ package cse.java2.project.service.intf;
 import java.util.List;
 import java.util.Map;
 
-public interface DataAnalyzer {
+public interface DataAnalyzerIntf {
   // Number of Answers
   double getPercentageOfQuestionsWithoutAnswers();
   double getAverageNumberOfAnswers();

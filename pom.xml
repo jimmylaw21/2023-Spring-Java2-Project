@@ -56,6 +56,12 @@
         </dependency>
 
         <!-- Add other dependencies for your project -->
+        <dependency>
+            <groupId>com.github.javaparser</groupId>
+            <artifactId>javaparser-core</artifactId>
+            <version>3.23.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
