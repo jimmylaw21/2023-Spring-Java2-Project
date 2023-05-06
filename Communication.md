@@ -249,3 +249,25 @@ public class UserController {
 现在，您已经在Spring Boot项目中成功集成了MyBatis，并可以使用它来处理数据库操作。这只是一个基本示例，MyBatis还提供了许多其他功能，如动态SQL、类型处理器、插件等。要了解更多关于MyBatis的信息，请查阅官方文档：https://mybatis.org/mybatis-3/
 
 加油哦哦哦
+
+# 2023/5/6
+
+为了将Owner对象导入到owner表中，需要以下内容：
+
+在mybatis的mapper XML文件中，编写针对Owner类的SQL语句，包括插入、更新、删除、查询等操作。
+
+在mybatis的mapper XML文件中，编写Owner类的resultMap，将查询结果映射到Owner对象中。
+
+编写对应的OwnerTypeHandler类，将Owner对象在Java对象和数据库字段之间进行转换。
+
+在mybatis的配置文件中，将OwnerTypeHandler注册到typeHandlers中，以便mybatis能够自动将Owner对象转换为数据库字段，或者将数据库字段转换为Owner对象。
+
+在代码中调用相应的方法，通过mybatis将Owner对象插入、更新、删除或查询出来。
+
+--chatGPT3.5
+
+StackOverflowThreadMapper是Mapper接口
+StackOverflowThreadMapper.xml是Mapper XML映射文件
+mybatis-config.xml是mybatis配置文件
+
+application.properties中新增了待连接的数据库信息，你需要新建一个数据库，数据库名为threads,用户名为post，密码为123456 如果忘记怎么建了可以参考[Experiment 1 Software Installing.pdf](https://github.com/jimmylaw21/2023-Spring-Java2-Project/files/11412484/Experiment.1.Software.Installing.pdf)中的练习2，建表的sql文件也已上传。
