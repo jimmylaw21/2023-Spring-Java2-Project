@@ -267,7 +267,9 @@ public class UserController {
 --chatGPT3.5
 
 StackOverflowThreadMapper是Mapper接口
+
 StackOverflowThreadMapper.xml是Mapper XML映射文件
+
 mybatis-config.xml是mybatis配置文件
 
 application.properties中新增了待连接的数据库信息，你需要新建一个数据库，数据库名为threads,用户名为post，密码为123456 如果忘记怎么建了可以参考[Experiment 1 Software Installing.pdf](https://github.com/jimmylaw21/2023-Spring-Java2-Project/files/11412484/Experiment.1.Software.Installing.pdf)中的练习2，建表的sql文件也已上传。
