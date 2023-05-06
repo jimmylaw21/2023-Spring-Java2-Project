@@ -54,7 +54,6 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.15.0</version> <!-- Please check for the latest version -->
         </dependency>
-<<<<<<< HEAD
 
         <!-- Add other dependencies for your project -->
         <dependency>
@@ -63,9 +62,6 @@
             <version>3.23.1</version>
         </dependency>
 
-    </dependencies>
-
-=======
         <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -87,15 +83,14 @@
             <groupId>org.xmlunit</groupId>
             <artifactId>xmlunit-core</artifactId>
         </dependency>
+
     </dependencies>
->>>>>>> a4341d2 (data storage)
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-<<<<<<< HEAD
-=======
+
                 <version>2.7.10</version>
                 <configuration>
                     <excludes>
