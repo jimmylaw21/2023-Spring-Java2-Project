@@ -3,13 +3,15 @@ package cse.java2.project.domain.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Owner {
   @JsonProperty("reputation")
   private int reputation;
 
   @JsonProperty("user_id")
-  private int userId;
+  private String userId;
 
   @JsonProperty("user_type")
   private String userType;
@@ -36,11 +38,11 @@ public class Owner {
     this.reputation = reputation;
   }
 
-  public int getUserId() {
+  public String getUserId() {
     return userId;
   }
 
-  public void setUserId(int userId) {
+  public void setUserId(String userId) {
     this.userId = userId;
   }
 
@@ -82,5 +84,24 @@ public class Owner {
 
   public void setLink(String link) {
     this.link = link;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Owner owner = (Owner) o;
+    return reputation == owner.reputation &&
+            acceptRate == owner.acceptRate &&
+            Objects.equals(userId, owner.userId) &&
+            Objects.equals(userType, owner.userType) &&
+            Objects.equals(profileImage, owner.profileImage) &&
+            Objects.equals(displayName, owner.displayName) &&
+            Objects.equals(link, owner.link);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(reputation, userId, userType, acceptRate, profileImage, displayName, link);
   }
 }

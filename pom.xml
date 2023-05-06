@@ -54,6 +54,7 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.15.0</version> <!-- Please check for the latest version -->
         </dependency>
+<<<<<<< HEAD
 
         <!-- Add other dependencies for your project -->
         <dependency>
@@ -64,11 +65,38 @@
 
     </dependencies>
 
+=======
+        <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-core</artifactId>
+        </dependency>
+    </dependencies>
+>>>>>>> a4341d2 (data storage)
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+<<<<<<< HEAD
+=======
+                <version>2.7.10</version>
                 <configuration>
                     <excludes>
                         <exclude>

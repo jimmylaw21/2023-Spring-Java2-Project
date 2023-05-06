@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cse.java2.project.mapper.StackOverflowThreadMapper">
+    <insert id="insertQuestion" parameterType="cse.java2.project.domain.model.dto.Question">
+        INSERT INTO question (question_id, title, body, tags, owner_id, owner_reputation, is_answered, view_count, favorite_count, down_vote_count, up_vote_count, answer_count, score, last_activity_date, creation_date, last_edit_date, link)
+        VALUES (#{questionId}, #{title}, #{body}, #{tags}, #{owner.userId}, #{ownerReputation}, #{isAnswered}, #{viewCount}, #{favoriteCount}, #{downVoteCount}, #{upVoteCount}, #{answerCount}, #{score}, #{lastActivityDate}, #{creationDate}, #{lastEditDate}, #{link})
+    </insert>
+    <resultMap id="questionResultMap" type="cse.java2.project.domain.model.dto.Question">
+        <id column="question_id" property="questionId"/>
+        <result column="title" property="title"/>
+        <result column="body" property="body"/>
+        <result column="tags" property="tags" typeHandler="cse.java2.project.domain.typehandler.QuestionTypeHandler"/>
+        <result column="owner_id" property="owner.userId"/>
+        <result column="owner_reputation" property="owner.reputation"/>
+        <result column="is_answered" property="isAnswered"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="favorite_count" property="favoriteCount"/>
+        <result column="down_vote_count" property="downVoteCount"/>
+        <result column="up_vote_count" property="upVoteCount"/>
+        <result column="answer_count" property="answerCount"/>
+        <result column="score" property="score"/>
+        <result column="last_activity_date" property="lastActivityDate"/>
+        <result column="creation_date" property="creationDate"/>
+        <result column="last_edit_date" property="lastEditDate"/>
+        <result column="link" property="link"/>
+    </resultMap>
+    <insert id="insertAnswer" parameterType="cse.java2.project.domain.model.dto.Answer">
+        INSERT INTO answer (answer_id, question_id, owner_id, down_vote_count, up_vote_count, is_accepted, score, last_activity_date, last_edit_date, creation_date, link, title, body)
+        VALUES (#{answerId}, #{questionId}, #{owner.userId}, #{downVoteCount}, #{upVoteCount}, #{isAccepted}, #{score}, #{lastActivityDate}, #{lastEditDate}, #{creationDate}, #{link}, #{title}, #{body})
+    </insert>
+    <resultMap id="AnswerResultMap" type="cse.java2.project.domain.model.dto.Answer">
+        <id column="answer_id" property="answerId"/>
+        <result column="question_id" property="questionId"/>
+        <result column="owner_id" property="owner.userId" />
+        <result column="down_vote_count" property="downVoteCount"/>
+        <result column="up_vote_count" property="upVoteCount"/>
+        <result column="is_accepted" property="isAccepted"/>
+        <result column="score" property="score"/>
+        <result column="last_activity_date" property="lastActivityDate"/>
+        <result column="last_edit_date" property="lastEditDate"/>
+        <result column="creation_date" property="creationDate"/>
+        <result column="link" property="link"/>
+        <result column="title" property="title"/>
+        <result column="body" property="body"/>
+    </resultMap>
+
+    <resultMap id="CommentResultMap" type="cse.java2.project.domain.model.dto.Comment">
+        <id column="comment_id" property="comment.commentId"/>
+        <result column="question_id" property="question_id"/>
+        <result column="post_id" property="comment.postId"/>
+        <result column="owner_id" property="comment.owner.userId"/>
+        <result column="edited" property="comment.edited"/>
+        <result column="creation_date" property="comment.creationDate"/>
+        <result column="link" property="comment.link"/>
+        <result column="body" property="comment.body"/>
+    </resultMap>
+    <insert id="insertOwner" parameterType="cse.java2.project.domain.model.dto.Owner">
+        INSERT INTO owner (user_id, display_name, reputation, user_type, accept_rate, profile_image, link)
+        VALUES (#{userId}, #{displayName}, #{reputation}, #{userType}, #{acceptRate}, #{profileImage}, #{link})
+    </insert>
+    <resultMap id="OwnerResultMap" type="cse.java2.project.domain.model.dto.Owner">
+        <id column="user_id" property="userId"/>
+        <result column="display_name" property="displayName"/>
+        <result column="reputation" property="reputation"/>
+        <result column="user_type" property="userType"/>
+        <result column="accept_rate" property="acceptRate"/>
+        <result column="profile_image" property="profileImage"/>
+        <result column="link" property="link"/>
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeHandlers>
+        <typeHandler handler="cse.java2.project.domain.typehandler.QuestionTypeHandler" javaType="cse.java2.project.domain.model.dto.Question"/>
+        <typeHandler handler="cse.java2.project.domain.typehandler.AnswerTypeHandler" javaType="cse.java2.project.domain.model.dto.Answer"/>
+        <typeHandler handler="cse.java2.project.domain.typehandler.CommentTypeHandler" javaType="cse.java2.project.domain.model.dto.Comment"/>
+        <typeHandler handler="cse.java2.project.domain.typehandler.OwnerTypeHandler" javaType="cse.java2.project.domain.model.dto.Owner"/>
+    </typeHandlers>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="org.postgresql.Driver"/>
+                <property name="url" value="jdbc:postgresql://localhost:5432/threads"/>
+                <property name="username" value="post"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="mapper/StackOverflowThreadMapper.xml"/>
+    </mappers>
+</configuration>
