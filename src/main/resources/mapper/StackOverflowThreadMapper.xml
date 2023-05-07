@@ -70,4 +70,8 @@
         <result column="link" property="link"/>
     </resultMap>
 
+    <select id="getAllQuestions" resultMap="QuestionResultMap">
+        SELECT * FROM questions
+    </select>
+
 </mapper>

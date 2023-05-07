@@ -3,6 +3,7 @@ package cse.java2.project.mapper;
 import cse.java2.project.domain.model.dto.*;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Map;
 import java.util.List;
 
 @Mapper
@@ -17,4 +18,25 @@ public interface StackOverflowThreadMapper {
     void insertComment(@Param("comment") Comment comment,@Param("question_id") int question_id);
 
     void insertOwner(Owner owner);
+
+    List<Question> getAllQuestions();
+
+    @Select("SELECT question_id FROM question")
+    List<Integer> getAllQuestionIds();
+
+    @Select("SELECT DISTINCT owner_id FROM (SELECT owner_id, question_id FROM question UNION ALL SELECT owner_id, question_id FROM answer UNION ALL SELECT owner_id, post_id as question_id FROM comment) AS temp WHERE temp.question_id = #{questionId}")
+    List<String> getParticipantsByQuestionId(int questionId);
+
+    @Select("SELECT owner_id, COUNT(*) as participation_count FROM (SELECT owner_id FROM question UNION ALL SELECT owner_id FROM answer UNION ALL SELECT owner_id FROM comment) AS temp GROUP BY owner_id ORDER BY participation_count DESC LIMIT #{limit}")
+    List<Map<String, Object>> getMostActiveUsersWithLimit(int limit);
+
+    @Select("SELECT body FROM question")
+    List<String> getAllQuestionBodies();
+
+    @Select("SELECT body FROM answer")
+    List<String> getAllAnswerBodies();
+
+    @Select("SELECT body FROM comment")
+    List<String> getAllCommentBodies();
+
 }

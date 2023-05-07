@@ -5,17 +5,21 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import cse.java2.project.mapper.StackOverflowThreadMapper;
 import cse.java2.project.service.intf.JavaApiIdentifierIntf;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class JavaApiIdentifier implements JavaApiIdentifierIntf {
+
+  @Autowired
+  private StackOverflowThreadMapper stackOverflowThreadMapper;
 
   @Override
   public List<String> extractCodeSnippets(String text) {
@@ -52,8 +56,36 @@ public class JavaApiIdentifier implements JavaApiIdentifierIntf {
     return classNamesAndMethodNames;
   }
 
+
   @Override
   public Map<String, Integer> getMostUsedJavaApi() {
-    return null;
+    Map<String, Integer> apiCounts = new HashMap<>();
+
+    // Get all question, answer, and comment bodies
+    List<String> questionBodies = stackOverflowThreadMapper.getAllQuestionBodies();
+    List<String> answerBodies = stackOverflowThreadMapper.getAllAnswerBodies();
+    List<String> commentBodies = stackOverflowThreadMapper.getAllCommentBodies();
+
+    List<String> allBodies = new ArrayList<>();
+    allBodies.addAll(questionBodies);
+    allBodies.addAll(answerBodies);
+    allBodies.addAll(commentBodies);
+
+    for (String body : allBodies) {
+      List<String> codeSnippets = extractCodeSnippets(body);
+      for (String codeSnippet : codeSnippets) {
+        List<String> classNamesAndMethodNames = extractClassAndMethodNames(codeSnippet);
+        for (String name : classNamesAndMethodNames) {
+          apiCounts.put(name, apiCounts.getOrDefault(name, 0) + 1);
+        }
+      }
+    }
+
+    // Sort the map by value in descending order
+    Map<String, Integer> sortedApiCounts = apiCounts.entrySet().stream()
+        .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+    return sortedApiCounts;
   }
 }
