@@ -24,10 +24,13 @@ public class ThreadCollectorApp {
   public static void main(String[] args) {
     ThreadCollector threadCollector = new ThreadCollector();
     String tag = "java";
-    int pageSize = 5;
-    int pageNum = 1;
+    int pageSize = 100;
+    int pageNum = 5;
     try {
-      List<StackOverflowThread> stackOverflowThreads = threadCollector.getStackOverflowThreadsByTag(tag, pageSize, pageNum);
+      List<StackOverflowThread> stackOverflowThreads = new ArrayList<>();
+        for (int i = 1; i <= pageNum; i++) {
+            stackOverflowThreads.addAll(threadCollector.getStackOverflowThreadsByTag(tag, pageSize, i));
+        }
       String resource = "mybatis-config.xml";
       InputStream inputStream = Resources.getResourceAsStream(resource);
       SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);

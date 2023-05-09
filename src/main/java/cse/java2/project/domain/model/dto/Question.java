@@ -3,10 +3,17 @@ package cse.java2.project.domain.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Question {
+
+  public Question() {
+    // 初始化 tags 列表
+    this.tags = new ArrayList<>();
+  }
+
   @JsonProperty("tags")
   private List<String> tags;
 

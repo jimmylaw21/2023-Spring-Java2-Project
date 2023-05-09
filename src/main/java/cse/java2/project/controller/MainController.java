@@ -1,6 +1,7 @@
 package cse.java2.project.controller;
 
 import cse.java2.project.service.intf.DataAnalyzerIntf;
+import cse.java2.project.service.intf.JavaApiIdentifierIntf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,30 +20,18 @@ public class MainController {
    */
   private final DataAnalyzerIntf dataAnalyzer;
 
+  private final JavaApiIdentifierIntf javaApiIdentifier;
+
   @Autowired
-  public MainController(DataAnalyzerIntf dataAnalyzer) {
+  public MainController(DataAnalyzerIntf dataAnalyzer, JavaApiIdentifierIntf javaApiIdentifier) {
     this.dataAnalyzer = dataAnalyzer;
+    this.javaApiIdentifier = javaApiIdentifier;
   }
 
 
   @GetMapping({"/", "/demo"})
   public String demo() {
     return "demo";
-  }
-
-  @GetMapping("/api/frequent-tags")
-  public @ResponseBody Map<String, Integer> getFrequentTagsWithJava() {
-    return dataAnalyzer.getFrequentTagsWithJava();
-  }
-
-  @GetMapping("/api/most-upvoted-tags")
-  public @ResponseBody Map<String, Integer> getMostUpvotedTagsOrTagCombinations() {
-    return dataAnalyzer.getMostUpvotedTagsOrTagCombinations();
-  }
-
-  @GetMapping("/api/most-viewed-tags")
-  public @ResponseBody Map<String, Integer> getMostViewedTagsOrTagCombinations() {
-    return dataAnalyzer.getMostViewedTagsOrTagCombinations();
   }
 
   @GetMapping("/api/percentage-of-questions-without-answers")
@@ -80,6 +69,23 @@ public class MainController {
     return dataAnalyzer.getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes();
   }
 
+  @GetMapping("/api/frequent-tags")
+  public @ResponseBody Map<String, Integer> getFrequentTagsWithJava() {
+    Map<String, Integer> result = dataAnalyzer.getFrequentTagsWithJava();
+    System.out.println(result);
+    return result;
+  }
+
+  @GetMapping("/api/most-upvoted-tags")
+  public @ResponseBody Map<String, Integer> getMostUpvotedTagsOrTagCombinations() {
+    return dataAnalyzer.getMostUpvotedTagsOrTagCombinations();
+  }
+
+  @GetMapping("/api/most-viewed-tags")
+  public @ResponseBody Map<String, Integer> getMostViewedTagsOrTagCombinations() {
+    return dataAnalyzer.getMostViewedTagsOrTagCombinations();
+  }
+
   @GetMapping("/api/distribution-of-user-participation")
   public @ResponseBody Map<Integer, Integer> getDistributionOfUserParticipation() {
     return dataAnalyzer.getDistributionOfUserParticipation();
@@ -88,6 +94,17 @@ public class MainController {
   @GetMapping("/api/most-active-users")
   public @ResponseBody List<String> getMostActiveUsers() {
     return dataAnalyzer.getMostActiveUsers();
+  }
+
+  @GetMapping("/api/most-used-JavaApi")
+    public @ResponseBody Map<String, Integer> getMostUsedJavaApi() {
+      return javaApiIdentifier.getMostUsedJavaApi();
+    }
+
+  //welcome
+  @GetMapping("/api/welcome")
+  public @ResponseBody String welcome() {
+    return "Welcome to the Stack Overflow Data Analyzer!";
   }
 
 }

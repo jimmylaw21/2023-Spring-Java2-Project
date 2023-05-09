@@ -72,6 +72,7 @@ public class JavaApiIdentifier implements JavaApiIdentifierIntf {
     allBodies.addAll(commentBodies);
 
     for (String body : allBodies) {
+      System.out.println(body);
       List<String> codeSnippets = extractCodeSnippets(body);
       for (String codeSnippet : codeSnippets) {
         List<String> classNamesAndMethodNames = extractClassAndMethodNames(codeSnippet);

@@ -73,7 +73,7 @@ public class ThreadCollector {
   public List<Question> getStackOverflowQuestions(String tag, int pageSize, int pageNum) throws IOException {
     String queryUrl = API_BASE_URL + "questions?page=" + pageNum + "&pagesize=" + pageSize
         + "&order=desc&sort=votes&tagged=" + tag + "&site=stackoverflow&client_id=" + CLIENT_ID
-        + "&key=" + KEY;
+        + "&key=" + KEY + "&filter=!*MjkmySiHGiOCmie";
 
     String responseJson = fetchContentFromUrl(queryUrl);
     StackOverflowWrapper<Question> stackOverflowWrapper = objectMapper.readValue(responseJson, objectMapper.getTypeFactory().constructParametricType(StackOverflowWrapper.class, Question.class));
@@ -82,14 +82,20 @@ public class ThreadCollector {
   }
 
   public List<Answer> getAnswerByQuestion(int questionId) throws IOException {
-    String answerUrl = API_BASE_URL + "questions/" + questionId + "/answers?order=desc&sort=votes&site=stackoverflow&client_id=" + CLIENT_ID + "&key=" + KEY;
+    String answerUrl = API_BASE_URL + "questions/" + questionId +
+            "/answers?order=desc&sort=votes&site=stackoverflow&client_id=" + CLIENT_ID +
+            "&key=" + KEY +
+            "&filter=!*MjkmySiHGiOCmie";
     String answerResponseJson = fetchContentFromUrl(answerUrl);
     StackOverflowWrapper<Answer> answerWrapper = objectMapper.readValue(answerResponseJson, objectMapper.getTypeFactory().constructParametricType(StackOverflowWrapper.class, Answer.class));
     return answerWrapper.getItems();
   }
 
   public List<Comment> getCommentByQuestion(int questionId) throws IOException {
-    String commentUrl = API_BASE_URL + "questions/" + questionId + "/comments?order=desc&sort=votes&site=stackoverflow&client_id=" + CLIENT_ID + "&key=" + KEY;
+    String commentUrl = API_BASE_URL + "questions/" + questionId +
+            "/comments?order=desc&sort=votes&site=stackoverflow&client_id=" +
+            CLIENT_ID + "&key=" +
+            KEY + "&filter=!*MjkmySiHGiOCmie";
     String commentResponseJson = fetchContentFromUrl(commentUrl);
     StackOverflowWrapper<Comment> commentWrapper = objectMapper.readValue(commentResponseJson, objectMapper.getTypeFactory().constructParametricType(StackOverflowWrapper.class, Comment.class));
     return commentWrapper.getItems();
