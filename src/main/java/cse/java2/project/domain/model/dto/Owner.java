@@ -91,17 +91,11 @@ public class Owner {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Owner owner = (Owner) o;
-    return reputation == owner.reputation &&
-            acceptRate == owner.acceptRate &&
-            Objects.equals(userId, owner.userId) &&
-            Objects.equals(userType, owner.userType) &&
-            Objects.equals(profileImage, owner.profileImage) &&
-            Objects.equals(displayName, owner.displayName) &&
-            Objects.equals(link, owner.link);
+    return Objects.equals(userId, owner.userId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(reputation, userId, userType, acceptRate, profileImage, displayName, link);
+    return Objects.hash(userId);
   }
 }
