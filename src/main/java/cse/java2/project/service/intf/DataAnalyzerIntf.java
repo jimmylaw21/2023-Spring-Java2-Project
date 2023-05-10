@@ -5,15 +5,15 @@ import java.util.Map;
 
 public interface DataAnalyzerIntf {
   // Number of Answers
-  double getPercentageOfQuestionsWithoutAnswers();
+  String getPercentageOfQuestionsWithoutAnswers();
   double getAverageNumberOfAnswers();
   int getMaximumNumberOfAnswers();
   Map<Integer, Integer> getDistributionOfNumberOfAnswers();
 
   // Accepted Answers
-  double getPercentageOfQuestionsWithAcceptedAnswers();
+  String getPercentageOfQuestionsWithAcceptedAnswers();
   Map<Long, Integer> getDistributionOfQuestionResolutionTime();
-  double getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes();
+  String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes();
 
   // Tags
   Map<String, Integer> getFrequentTagsWithJava();

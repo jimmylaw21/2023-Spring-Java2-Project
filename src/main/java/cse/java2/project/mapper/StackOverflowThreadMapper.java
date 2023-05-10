@@ -18,6 +18,8 @@ public interface StackOverflowThreadMapper {
     void insertComment(@Param("comment") Comment comment,@Param("question_id") int question_id);
 
     void insertOwner(Owner owner);
+    @Select("SELECT  answer_id FROM answer WHERE question_id = #{questionId}")
+    List<Answer> getAnswersByQuestionId(int questionId);
 
     @Select("SELECT * FROM question")
     List<Question> getAllQuestions();
