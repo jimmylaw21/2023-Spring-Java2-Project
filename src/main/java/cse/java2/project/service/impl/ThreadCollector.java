@@ -63,13 +63,14 @@ public class ThreadCollector {
     stackOverflowThread.setQuestion(question);
 
     List<Answer> answers = getAnswerByQuestion(question.getQuestionId());
+    List<Comment> comments = getCommentByQuestion(question.getQuestionId());
     for (Answer answer : answers) {
-      List<Comment> answerComments = getCommentByAnswer(answer.getAnswerId());
+      comments.addAll(getCommentByAnswer(answer.getAnswerId()));
       // do something with answerComments, e.g., add them to the answer object
     }
     stackOverflowThread.setAnswers(answers);
 
-    List<Comment> comments = getCommentByQuestion(question.getQuestionId());
+
     stackOverflowThread.setComments(comments);
 
     return stackOverflowThread;
@@ -82,6 +83,7 @@ public class ThreadCollector {
         + "&key=" + KEY + "&filter=" + fliter.fliter;
 
     String responseJson = fetchContentFromUrl(queryUrl);
+    System.out.println(responseJson);
     StackOverflowWrapper<Question> stackOverflowWrapper = objectMapper.readValue(responseJson, objectMapper.getTypeFactory().constructParametricType(StackOverflowWrapper.class, Question.class));
 
     return stackOverflowWrapper.getItems();

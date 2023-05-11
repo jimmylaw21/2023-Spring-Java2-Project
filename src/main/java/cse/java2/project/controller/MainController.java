@@ -35,7 +35,7 @@ public class MainController {
   }
 
   @GetMapping("/api/percentage-of-questions-without-answers")
-  public @ResponseBody double getPercentageOfQuestionsWithoutAnswers() {
+  public @ResponseBody String getPercentageOfQuestionsWithoutAnswers() {
     return dataAnalyzer.getPercentageOfQuestionsWithoutAnswers();
   }
 
@@ -55,7 +55,7 @@ public class MainController {
   }
 
   @GetMapping("/api/percentage-of-questions-with-accepted-answers")
-  public @ResponseBody double getPercentageOfQuestionsWithAcceptedAnswers() {
+  public @ResponseBody String getPercentageOfQuestionsWithAcceptedAnswers() {
     return dataAnalyzer.getPercentageOfQuestionsWithAcceptedAnswers();
   }
 
@@ -65,7 +65,7 @@ public class MainController {
   }
 
   @GetMapping("/api/percentage-of-questions-with-non-accepted-answers-having-more-upvotes")
-  public @ResponseBody double getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes() {
+  public @ResponseBody String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes() {
     return dataAnalyzer.getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes();
   }
 

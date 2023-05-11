@@ -41,7 +41,7 @@ public class Answer {
   @JsonProperty("title")
   private String title;
 
-  @JsonProperty("body")
+  @JsonProperty("body_markdown")
   private String body;
 
   // Getters and setters for all fields

@@ -9,10 +9,10 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Question {
 
-  public Question() {
-    // 初始化 tags 列表
-    this.tags = new ArrayList<>();
-  }
+//  public Question() {
+//    // 初始化 tags 列表
+//    this.tags = new ArrayList<>();
+//  }
 
   @JsonProperty("tags")
   private List<String> tags;
@@ -35,8 +35,8 @@ public class Question {
   @JsonProperty("up_vote_count")
   private int upVoteCount;
 
-  @JsonProperty("accepted_answer_id")
-  private int acceptedAnswerId;
+//  @JsonProperty("accepted_answer_id")
+//  private int acceptedAnswerId;
 
   @JsonProperty("answer_count")
   private int answerCount;
@@ -62,7 +62,7 @@ public class Question {
   @JsonProperty("title")
   private String title;
 
-  @JsonProperty("body")
+  @JsonProperty("body_markdown")
   private String body;
 
   // Getters and setters for all fields
@@ -123,13 +123,13 @@ public class Question {
     this.upVoteCount = upVoteCount;
   }
 
-  public int getAcceptedAnswerId() {
-    return acceptedAnswerId;
-  }
-
-  public void setAcceptedAnswerId(int acceptedAnswerId) {
-    this.acceptedAnswerId = acceptedAnswerId;
-  }
+//  public int getAcceptedAnswerId() {
+//    return acceptedAnswerId;
+//  }
+//
+//  public void setAcceptedAnswerId(int acceptedAnswerId) {
+//    this.acceptedAnswerId = acceptedAnswerId;
+//  }
 
   public int getAnswerCount() {
     return answerCount;
