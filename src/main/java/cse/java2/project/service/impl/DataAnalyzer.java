@@ -1,11 +1,13 @@
 package cse.java2.project.service.impl;
 
+import cse.java2.project.domain.model.dto.Answer;
 import cse.java2.project.domain.model.dto.Question;
 import cse.java2.project.mapper.StackOverflowThreadMapper;
 import cse.java2.project.service.intf.DataAnalyzerIntf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,42 +22,113 @@ public class DataAnalyzer implements DataAnalyzerIntf {
 
   @Autowired
   public DataAnalyzer(StackOverflowThreadMapper stackOverflowThreadMapper) {
+
     this.stackOverflowThreadMapper = stackOverflowThreadMapper;
   }
 
   @Override
-  public double getPercentageOfQuestionsWithoutAnswers() {
-    return 0;
+  public String getPercentageOfQuestionsWithoutAnswers() {
+    double questionWithoutAnswersCount=0;
+    List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
+    for (Question question : allQuestions) {
+      if (question.getAnswerCount()==0) {
+        questionWithoutAnswersCount++;
+      }
+    }
+    double questionCount=allQuestions.size();
+    NumberFormat num=NumberFormat.getPercentInstance();
+    return num.format(questionWithoutAnswersCount/questionCount);
   }
 
   @Override
   public double getAverageNumberOfAnswers() {
-    return 0;
+    List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
+    double answerTotalNumber=0;
+    for (Question question : allQuestions) {
+      answerTotalNumber+=question.getAnswerCount();
+    }
+    return answerTotalNumber/allQuestions.size();
   }
 
   @Override
   public int getMaximumNumberOfAnswers() {
-    return 0;
+    List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
+    int maxAnswerCount=0;
+    for (Question question : allQuestions) {
+      if (question.getAnswerCount()>maxAnswerCount) {
+        maxAnswerCount=question.getAnswerCount();
+      }
+    }
+    return maxAnswerCount;
   }
 
   @Override
   public Map<Integer, Integer> getDistributionOfNumberOfAnswers() {
-    return null;
+    List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
+    Map<Integer, Integer> answerCount = new HashMap<>();
+    for (Question question : allQuestions) {
+      int count=question.getAnswerCount();
+      answerCount.put(count, answerCount.getOrDefault(count, 0) + 1);
+    }
+    return answerCount;
   }
 
   @Override
-  public double getPercentageOfQuestionsWithAcceptedAnswers() {
-    return 0;
+  public String getPercentageOfQuestionsWithAcceptedAnswers() {
+    List<Integer> questionIds = stackOverflowThreadMapper.getAllQuestionIds();
+    double acceptedAnswerCount=0;
+    for (Integer questionId : questionIds) {
+      List<Answer> answers = stackOverflowThreadMapper.getAnswersByQuestionId(questionId);
+      for (Answer answer : answers) {
+        if(answer.isAccepted()){
+          acceptedAnswerCount++;//one question could only have one accepted answer
+        }
+      }
+    }
+    NumberFormat num=NumberFormat.getPercentInstance();
+    return num.format(acceptedAnswerCount/questionIds.size());
+
   }
 
   @Override
   public Map<Long, Integer> getDistributionOfQuestionResolutionTime() {
-    return null;
+    List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
+    Map<Long, Integer> questionResolutionTime = new HashMap<>();
+    for (Question question : allQuestions) {
+      long questionTime = question.getCreationDate();
+      List<Answer> answers = stackOverflowThreadMapper.getAnswersByQuestionId(question.getQuestionId());
+      for (Answer answer : answers) {
+        if (answer.isAccepted()) {
+          long acceptedAnswerTime = answer.getCreationDate();
+          long diff = acceptedAnswerTime - questionTime;
+          questionResolutionTime.put(diff, questionResolutionTime.getOrDefault(diff, 0) + 1);
+        }
+      }
+    }
+    return questionResolutionTime;
   }
 
   @Override
-  public double getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes() {
-    return 0;
+  public String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes() {
+    List<Integer> questionIds = stackOverflowThreadMapper.getAllQuestionIds();
+    double count=0;
+    for (int questionId : questionIds) {
+      int acceptedAnswerUpvote=0;
+      int otherAnswerMaxUpvote=0;
+      List<Answer> answers = stackOverflowThreadMapper.getAnswersByQuestionId(questionId);
+      for (Answer answer : answers) {
+        if (answer.isAccepted()) {
+          acceptedAnswerUpvote=answer.getUpVoteCount();
+        }else {
+          otherAnswerMaxUpvote=Math.max(otherAnswerMaxUpvote, answer.getUpVoteCount());
+        }
+      }
+      if(acceptedAnswerUpvote!=0&&acceptedAnswerUpvote<otherAnswerMaxUpvote){
+        count++;
+      }
+    }
+    NumberFormat num=NumberFormat.getPercentInstance();
+    return num.format(count/questionIds.size());
   }
 
   @Override
