@@ -2,6 +2,7 @@ package cse.java2.project.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cse.java2.project.filter.fliter;
 import cse.java2.project.domain.model.dto.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -62,6 +63,10 @@ public class ThreadCollector {
     stackOverflowThread.setQuestion(question);
 
     List<Answer> answers = getAnswerByQuestion(question.getQuestionId());
+    for (Answer answer : answers) {
+      List<Comment> answerComments = getCommentByAnswer(answer.getAnswerId());
+      // do something with answerComments, e.g., add them to the answer object
+    }
     stackOverflowThread.setAnswers(answers);
 
     List<Comment> comments = getCommentByQuestion(question.getQuestionId());
@@ -70,10 +75,11 @@ public class ThreadCollector {
     return stackOverflowThread;
   }
 
+
   public List<Question> getStackOverflowQuestions(String tag, int pageSize, int pageNum) throws IOException {
     String queryUrl = API_BASE_URL + "questions?page=" + pageNum + "&pagesize=" + pageSize
         + "&order=desc&sort=votes&tagged=" + tag + "&site=stackoverflow&client_id=" + CLIENT_ID
-        + "&key=" + KEY + "&filter=!*MjkmySiHGiOCmie";
+        + "&key=" + KEY + "&filter=" + fliter.fliter;
 
     String responseJson = fetchContentFromUrl(queryUrl);
     StackOverflowWrapper<Question> stackOverflowWrapper = objectMapper.readValue(responseJson, objectMapper.getTypeFactory().constructParametricType(StackOverflowWrapper.class, Question.class));
@@ -82,26 +88,78 @@ public class ThreadCollector {
   }
 
   public List<Answer> getAnswerByQuestion(int questionId) throws IOException {
-    String answerUrl = API_BASE_URL + "questions/" + questionId +
-            "/answers?order=desc&sort=votes&site=stackoverflow&client_id=" + CLIENT_ID +
-            "&key=" + KEY +
-            "&filter=!*MjkmySiHGiOCmie";
-    String answerResponseJson = fetchContentFromUrl(answerUrl);
-    StackOverflowWrapper<Answer> answerWrapper = objectMapper.readValue(answerResponseJson, objectMapper.getTypeFactory().constructParametricType(StackOverflowWrapper.class, Answer.class));
-    return answerWrapper.getItems();
+    List<Answer> allAnswers = new ArrayList<>();
+    int page = 1;
+    while (true) {
+      String answerUrl = API_BASE_URL + "questions/" + questionId +
+              "/answers?order=desc&sort=votes&site=stackoverflow&client_id=" + CLIENT_ID +
+              "&key=" + KEY +
+              "&filter=" +
+              fliter.fliter +
+              "&page=" + page +
+              "&pagesize=100";
+      String answerResponseJson = fetchContentFromUrl(answerUrl);
+      StackOverflowWrapper<Answer> answerWrapper = objectMapper.readValue(answerResponseJson, objectMapper.getTypeFactory().constructParametricType(StackOverflowWrapper.class, Answer.class));
+      List<Answer> answers = answerWrapper.getItems();
+      if (answers.isEmpty()) {
+        break;
+      }
+      allAnswers.addAll(answers);
+      page++;
+    }
+    return allAnswers;
   }
+
 
   public List<Comment> getCommentByQuestion(int questionId) throws IOException {
-    String commentUrl = API_BASE_URL + "questions/" + questionId +
-            "/comments?order=desc&sort=votes&site=stackoverflow&client_id=" +
-            CLIENT_ID + "&key=" +
-            KEY + "&filter=!*MjkmySiHGiOCmie";
-    String commentResponseJson = fetchContentFromUrl(commentUrl);
-    StackOverflowWrapper<Comment> commentWrapper = objectMapper.readValue(commentResponseJson, objectMapper.getTypeFactory().constructParametricType(StackOverflowWrapper.class, Comment.class));
-    return commentWrapper.getItems();
+    List<Comment> allComments = new ArrayList<>();
+    int page = 1;
+    while (true) {
+      String commentUrl = API_BASE_URL + "questions/" + questionId +
+              "/comments?order=desc&sort=votes&site=stackoverflow&client_id=" + CLIENT_ID +
+              "&key=" + KEY +
+              "&filter=" +
+                fliter.fliter +
+              "&page=" + page +
+              "&pagesize=100";
+      String commentResponseJson = fetchContentFromUrl(commentUrl);
+      StackOverflowWrapper<Comment> commentWrapper = objectMapper.readValue(commentResponseJson, objectMapper.getTypeFactory().constructParametricType(StackOverflowWrapper.class, Comment.class));
+      List<Comment> comments = commentWrapper.getItems();
+      if (comments.isEmpty()) {
+        break;
+      }
+      allComments.addAll(comments);
+      page++;
+    }
+    return allComments;
   }
 
-    private String fetchContentFromUrl(String url) throws IOException {
+  public List<Comment> getCommentByAnswer(int answerId) throws IOException {
+    List<Comment> allComments = new ArrayList<>();
+    int page = 1;
+    while (true) {
+      String commentUrl = API_BASE_URL + "answers/" + answerId +
+              "/comments?order=desc&sort=votes&site=stackoverflow&client_id=" + CLIENT_ID +
+              "&key=" + KEY +
+              "&filter=" +
+                fliter.fliter +
+              "&page=" + page +
+              "&pagesize=100";
+      String commentResponseJson = fetchContentFromUrl(commentUrl);
+      StackOverflowWrapper<Comment> commentWrapper = objectMapper.readValue(commentResponseJson, objectMapper.getTypeFactory().constructParametricType(StackOverflowWrapper.class, Comment.class));
+      List<Comment> comments = commentWrapper.getItems();
+      if (comments.isEmpty()) {
+        break;
+      }
+      allComments.addAll(comments);
+      page++;
+    }
+    return allComments;
+  }
+
+
+
+  private String fetchContentFromUrl(String url) throws IOException {
     CloseableHttpClient httpClient = HttpClients.createDefault();
     HttpGet request = new HttpGet(url);
     request.addHeader("Accept-Encoding", "gzip");

@@ -31,7 +31,7 @@ public class MainController {
 
   @GetMapping({"/", "/demo"})
   public String demo() {
-    return "demo";
+    return "index";
   }
 
   @GetMapping("/api/percentage-of-questions-without-answers")

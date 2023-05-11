@@ -35,6 +35,9 @@ public class Question {
   @JsonProperty("up_vote_count")
   private int upVoteCount;
 
+  @JsonProperty("accepted_answer_id")
+  private int acceptedAnswerId;
+
   @JsonProperty("answer_count")
   private int answerCount;
 
@@ -118,6 +121,14 @@ public class Question {
 
   public void setUpVoteCount(int upVoteCount) {
     this.upVoteCount = upVoteCount;
+  }
+
+  public int getAcceptedAnswerId() {
+    return acceptedAnswerId;
+  }
+
+  public void setAcceptedAnswerId(int acceptedAnswerId) {
+    this.acceptedAnswerId = acceptedAnswerId;
   }
 
   public int getAnswerCount() {
