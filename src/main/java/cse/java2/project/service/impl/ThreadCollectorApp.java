@@ -8,6 +8,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -24,13 +25,13 @@ public class ThreadCollectorApp {
   public static void main(String[] args) {
     ThreadCollector threadCollector = new ThreadCollector();
     String tag = "java";
-    int pageSize = 100;
-    int pageNum = 5;
+    int pageSize = 1;
+    int pageNum = 1;
     try {
       List<StackOverflowThread> stackOverflowThreads = new ArrayList<>();
-        for (int i = 1; i <= pageNum; i++) {
-            stackOverflowThreads.addAll(threadCollector.getStackOverflowThreadsByTag(tag, pageSize, i));
-        }
+//        for (int i = 1; i <= pageNum; i++) {
+            stackOverflowThreads.addAll(threadCollector.getStackOverflowThreadsByTag(tag, pageSize, pageNum));
+//        }
       String resource = "mybatis-config.xml";
       InputStream inputStream = Resources.getResourceAsStream(resource);
       SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
@@ -39,33 +40,53 @@ public class ThreadCollectorApp {
       try {
         StackOverflowThreadMapper mapper = sqlSession.getMapper(StackOverflowThreadMapper.class);
         //插入用户数据
-        Set<Owner> users=new LinkedHashSet<>();
-        for(StackOverflowThread thread:stackOverflowThreads){
+        // 插入用户数据
+        Set<Owner> users = new LinkedHashSet<>();
+        for (StackOverflowThread thread : stackOverflowThreads) {
           users.add(thread.getQuestion().getOwner());
-          for (Answer answer:thread.getAnswers()){
+          for (Answer answer : thread.getAnswers()) {
             users.add(answer.getOwner());
           }
-          for (Comment comment:thread.getComments()){
+          for (Comment comment : thread.getComments()) {
             users.add(comment.getOwner());
           }
         }
-        for (Owner owner:users){
-          if(owner.getUserId()!=null) {
-            mapper.insertOwner(owner);
+
+        for (Owner owner : users) {
+          if (owner.getUserId() != null) {
+            try {
+              mapper.insertOwner(owner);
+            } catch (DuplicateKeyException e) {
+              System.err.println("Duplicate key found for owner: " + owner.getUserId() + ". Skipping insert.");
+            }
           }
         }
-        //插入问题数据
-        for(StackOverflowThread thread : stackOverflowThreads) {
-          mapper.insertQuestion(thread.getQuestion()); // 调用Mapper中定义的add方法插入数据
+
+//插入问题数据
+        for (StackOverflowThread thread : stackOverflowThreads) {
+          try {
+            mapper.insertQuestion(thread.getQuestion()); // 调用Mapper中定义的add方法插入数据
+          } catch (DuplicateKeyException e) {
+            System.err.println("Duplicate key found for question: " + thread.getQuestion().getQuestionId() + ". Skipping insert.");
+          }
           //插入回答数据
-          for (Answer answer:thread.getAnswers()){
-            mapper.insertAnswer(answer);
+          for (Answer answer : thread.getAnswers()) {
+            try {
+              mapper.insertAnswer(answer);
+            } catch (DuplicateKeyException e) {
+              System.err.println("Duplicate key found for answer: " + answer.getAnswerId() + ". Skipping insert.");
+            }
           }
           //插入评论数据
-          for (Comment comment:thread.getComments()){
-            mapper.insertComment(comment,thread.getQuestion().getQuestionId());
+          for (Comment comment : thread.getComments()) {
+            try {
+              mapper.insertComment(comment, thread.getQuestion().getQuestionId());
+            } catch (DuplicateKeyException e) {
+              System.err.println("Duplicate key found for comment: " + comment.getCommentId() + ". Skipping insert.");
+            }
           }
         }
+
         sqlSession.commit(); // 提交事务
       } finally {
         sqlSession.close(); // 关闭SqlSession

@@ -23,7 +23,7 @@ public class Comment {
   @JsonProperty("link")
   private String link;
 
-  @JsonProperty("body_markdown")
+  @JsonProperty("body")
   private String body;
 
   // Getters and setters for all fields
