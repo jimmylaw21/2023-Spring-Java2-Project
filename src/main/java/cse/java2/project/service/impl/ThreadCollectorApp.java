@@ -148,7 +148,7 @@ public class ThreadCollectorApp {
       if (owner.getUserId() != null) {
         try {
           mapper.insertOwner(owner);
-        } catch (DuplicateKeyException e) {
+        } catch (Exception e) {
           System.err.println("Duplicate key found for owner: " + owner.getUserId() + ". Skipping insert.");
         }
       }
@@ -157,20 +157,20 @@ public class ThreadCollectorApp {
     for (StackOverflowThread thread : stackOverflowThreads) {
       try {
         mapper.insertQuestion(thread.getQuestion());
-      } catch (DuplicateKeyException e) {
+      } catch (Exception e) {
         System.err.println("Duplicate key found for question: " + thread.getQuestion().getQuestionId() + ". Skipping insert.");
       }
       for (Answer answer : thread.getAnswers()) {
         try {
           mapper.insertAnswer(answer);
-        } catch (DuplicateKeyException e) {
+        } catch (Exception e) {
           System.err.println("Duplicate key found for answer: " + answer.getAnswerId() + ". Skipping insert.");
         }
       }
       for (Comment comment : thread.getComments()) {
         try {
           mapper.insertComment(comment, thread.getQuestion().getQuestionId());
-        } catch (DuplicateKeyException e) {
+        } catch (Exception e) {
           System.err.println("Duplicate key found for comment: " + comment.getCommentId() + ". Skipping insert.");
         }
       }
