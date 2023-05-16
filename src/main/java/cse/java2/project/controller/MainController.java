@@ -34,75 +34,75 @@ public class MainController {
     return "index";
   }
 
-  @GetMapping("/api/percentage-of-questions-without-answers")
+  @GetMapping("/percentage-of-questions-without-answers")
   public @ResponseBody String getPercentageOfQuestionsWithoutAnswers() {
     return dataAnalyzer.getPercentageOfQuestionsWithoutAnswers();
   }
 
-  @GetMapping("/api/average-number-of-answers")
+  @GetMapping("/average-number-of-answers")
   public @ResponseBody double getAverageNumberOfAnswers() {
     return dataAnalyzer.getAverageNumberOfAnswers();
   }
 
-  @GetMapping("/api/maximum-number-of-answers")
+  @GetMapping("/maximum-number-of-answers")
   public @ResponseBody int getMaximumNumberOfAnswers() {
     return dataAnalyzer.getMaximumNumberOfAnswers();
   }
 
-  @GetMapping("/api/distribution-of-number-of-answers")
+  @GetMapping("/distribution-of-number-of-answers")
   public @ResponseBody Map<Integer, Integer> getDistributionOfNumberOfAnswers() {
     return dataAnalyzer.getDistributionOfNumberOfAnswers();
   }
 
-  @GetMapping("/api/percentage-of-questions-with-accepted-answers")
+  @GetMapping("/percentage-of-questions-with-accepted-answers")
   public @ResponseBody String getPercentageOfQuestionsWithAcceptedAnswers() {
     return dataAnalyzer.getPercentageOfQuestionsWithAcceptedAnswers();
   }
 
-  @GetMapping("/api/distribution-of-question-resolution-time")
+  @GetMapping("/distribution-of-question-resolution-time")
   public @ResponseBody Map<Long, Integer> getDistributionOfQuestionResolutionTime() {
     return dataAnalyzer.getDistributionOfQuestionResolutionTime();
   }
 
-  @GetMapping("/api/percentage-of-questions-with-non-accepted-answers-having-more-upvotes")
+  @GetMapping("/percentage-of-questions-with-non-accepted-answers-having-more-upvotes")
   public @ResponseBody String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes() {
     return dataAnalyzer.getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes();
   }
 
-  @GetMapping("/api/frequent-tags")
+  @GetMapping("/frequent-tags")
   public @ResponseBody Map<String, Integer> getFrequentTagsWithJava() {
     Map<String, Integer> result = dataAnalyzer.getFrequentTagsWithJava();
     System.out.println(result);
     return result;
   }
 
-  @GetMapping("/api/most-upvoted-tags")
+  @GetMapping("/most-upvoted-tags")
   public @ResponseBody Map<String, Integer> getMostUpvotedTagsOrTagCombinations() {
     return dataAnalyzer.getMostUpvotedTagsOrTagCombinations();
   }
 
-  @GetMapping("/api/most-viewed-tags")
+  @GetMapping("/most-viewed-tags")
   public @ResponseBody Map<String, Integer> getMostViewedTagsOrTagCombinations() {
     return dataAnalyzer.getMostViewedTagsOrTagCombinations();
   }
 
-  @GetMapping("/api/distribution-of-user-participation")
+  @GetMapping("/distribution-of-user-participation")
   public @ResponseBody Map<Integer, Integer> getDistributionOfUserParticipation() {
     return dataAnalyzer.getDistributionOfUserParticipation();
   }
 
-  @GetMapping("/api/most-active-users")
+  @GetMapping("/most-active-users")
   public @ResponseBody List<String> getMostActiveUsers() {
     return dataAnalyzer.getMostActiveUsers();
   }
 
-  @GetMapping("/api/most-used-JavaApi")
+  @GetMapping("/most-used-JavaApi")
     public @ResponseBody Map<String, Integer> getMostUsedJavaApi() {
       return javaApiIdentifier.getMostUsedJavaApi();
     }
 
   //welcome
-  @GetMapping("/api/welcome")
+  @GetMapping("/welcome")
   public @ResponseBody String welcome() {
     return "Welcome to the Stack Overflow Data Analyzer!";
   }
