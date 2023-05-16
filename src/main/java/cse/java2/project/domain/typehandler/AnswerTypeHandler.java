@@ -27,21 +27,6 @@ public class AnswerTypeHandler extends BaseTypeHandler<Answer> {
 
     @Override
     public Answer getNullableResult(ResultSet rs, String columnName) throws SQLException {
-        return createAnswer(rs, columnName);
-    }
-
-    @Override
-    public Answer getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-        return createAnswer(rs, columnIndex);
-    }
-
-    @Override
-    public Answer getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-        // Not implemented
-        return null;
-    }
-
-    private Answer createAnswer(ResultSet rs, String columnName) throws SQLException {
         Answer answer = new Answer();
         answer.setAnswerId(rs.getInt("answer_id"));
         answer.setQuestionId(rs.getInt("question_id"));
@@ -61,24 +46,31 @@ public class AnswerTypeHandler extends BaseTypeHandler<Answer> {
         return answer;
     }
 
-    private Answer createAnswer(ResultSet rs, int columnIndex) throws SQLException {
+    @Override
+    public Answer getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
         Answer answer = new Answer();
-        answer.setAnswerId(rs.getInt(columnIndex));
-        answer.setQuestionId(rs.getInt(columnIndex + 1));
+        answer.setAnswerId(rs.getInt("answer_id"));
+        answer.setQuestionId(rs.getInt("question_id"));
         Owner owner = new Owner();
-        owner.setUserId(rs.getString(columnIndex + 2));
+        owner.setUserId(rs.getString("owner_id"));
         answer.setOwner(owner);
-        answer.setDownVoteCount(rs.getInt(columnIndex + 3));
-        answer.setUpVoteCount(rs.getInt(columnIndex + 4));
-        answer.setAccepted(rs.getBoolean(columnIndex + 5));
-        answer.setScore(rs.getInt(columnIndex + 6));
-        answer.setLastActivityDate(rs.getLong(columnIndex + 7));
-        answer.setLastEditDate(rs.getLong(columnIndex + 8));
-        answer.setCreationDate(rs.getLong(columnIndex + 9));
-        answer.setLink(rs.getString(columnIndex + 10));
-        answer.setTitle(rs.getString(columnIndex + 11));
-        answer.setBody(rs.getString(columnIndex + 12));
+        answer.setDownVoteCount(rs.getInt("down_vote_count"));
+        answer.setUpVoteCount(rs.getInt("up_vote_count"));
+        answer.setAccepted(rs.getBoolean("is_accepted"));
+        answer.setScore(rs.getInt("score"));
+        answer.setLastActivityDate(rs.getLong("last_activity_date"));
+        answer.setLastEditDate(rs.getLong("last_edit_date"));
+        answer.setCreationDate(rs.getLong("creation_date"));
+        answer.setLink(rs.getString("link"));
+        answer.setTitle(rs.getString("title"));
+        answer.setBody(rs.getString("body"));
         return answer;
+    }
+
+    @Override
+    public Answer getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+        // Not implemented
+        return null;
     }
 }
 

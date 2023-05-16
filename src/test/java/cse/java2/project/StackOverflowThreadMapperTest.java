@@ -102,9 +102,5 @@ public class StackOverflowThreadMapperTest {
         // Add any additional assertions as needed, e.g., checking specific data points
     }
 
-    @Test
-    public void getAllOwnerIdsTest() {
-
-    }
 }
 

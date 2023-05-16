@@ -1,6 +1,10 @@
 package cse.java2.project;
 
 import cse.java2.project.service.impl.DataAnalyzer;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,6 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import cse.java2.project.domain.model.dto.Question;
 import cse.java2.project.mapper.StackOverflowThreadMapper;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +29,18 @@ public class DataAnalyzerTests {
     @Autowired
     private DataAnalyzer dataAnalyzer;
 
-    @MockBean
-    private StackOverflowThreadMapper stackOverflowThreadMapper;
+    String resource = "mybatis-config.xml";
+    InputStream inputStream = Resources.getResourceAsStream(resource);
+    SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+    SqlSession sqlSession = sqlSessionFactory.openSession();
+    StackOverflowThreadMapper mapper = sqlSession.getMapper(StackOverflowThreadMapper.class);
+
+    public DataAnalyzerTests() throws IOException {
+    }
 
     @BeforeEach
     public void setUp() {
+        dataAnalyzer = new DataAnalyzer(mapper);
 //        Question q1 = new Question();
 //        q1.setAnswerCount(3);
 //

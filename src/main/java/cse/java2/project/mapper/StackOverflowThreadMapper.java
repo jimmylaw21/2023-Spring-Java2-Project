@@ -19,7 +19,7 @@ public interface StackOverflowThreadMapper {
 
     void insertOwner(Owner owner);
 
-    @Select("SELECT  answer_id FROM answer WHERE question_id = #{questionId}")
+    @Select("SELECT * FROM answer WHERE question_id = #{questionId}")
     List<Answer> getAnswersByQuestionId(int questionId);
 
     @Select("SELECT * FROM question")
