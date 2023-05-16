@@ -29,9 +29,9 @@ public class QuestionTypeHandler extends BaseTypeHandler<Question> {
         ps.setInt(11, parameter.getUpVoteCount());
         ps.setInt(12, parameter.getAnswerCount());
         ps.setInt(13, parameter.getScore());
-        ps.setTimestamp(14, new Timestamp(parameter.getLastActivityDate()));
-        ps.setTimestamp(15, new Timestamp(parameter.getCreationDate()));
-        ps.setTimestamp(16, new Timestamp(parameter.getLastEditDate()));
+        ps.setLong(14, parameter.getLastActivityDate());
+        ps.setLong(15, parameter.getCreationDate());
+        ps.setLong(16, parameter.getLastEditDate());
         ps.setString(17, parameter.getLink());
     }
 
@@ -53,9 +53,9 @@ public class QuestionTypeHandler extends BaseTypeHandler<Question> {
         question.setUpVoteCount(rs.getInt("up_vote_count"));
         question.setAnswerCount(rs.getInt("answer_count"));
         question.setScore(rs.getInt("score"));
-        question.setLastActivityDate(rs.getTimestamp("last_activity_date").getTime());
-        question.setCreationDate(rs.getTimestamp("creation_date").getTime());
-        question.setLastEditDate(rs.getTimestamp("last_edit_date").getTime());
+        question.setLastActivityDate(rs.getLong("last_activity_date"));
+        question.setCreationDate(rs.getLong("creation_date"));
+        question.setLastEditDate(rs.getLong("last_edit_date"));
         question.setLink(rs.getString("link"));
         return question;
     }
@@ -78,9 +78,9 @@ public class QuestionTypeHandler extends BaseTypeHandler<Question> {
         question.setUpVoteCount(rs.getInt("up_vote_count"));
         question.setAnswerCount(rs.getInt("answer_count"));
         question.setScore(rs.getInt("score"));
-        question.setLastActivityDate(rs.getTimestamp("last_activity_date").getTime());
-        question.setCreationDate(rs.getTimestamp("creation_date").getTime());
-        question.setLastEditDate(rs.getTimestamp("last_edit_date").getTime());
+        question.setLastActivityDate(rs.getLong("last_activity_date"));
+        question.setCreationDate(rs.getLong("creation_date"));
+        question.setLastEditDate(rs.getLong("last_edit_date"));
         question.setLink(rs.getString("link"));
         return question;
     }
@@ -103,9 +103,9 @@ public class QuestionTypeHandler extends BaseTypeHandler<Question> {
         question.setUpVoteCount(cs.getInt("up_vote_count"));
         question.setAnswerCount(cs.getInt("answer_count"));
         question.setScore(cs.getInt("score"));
-        question.setLastActivityDate(cs.getTimestamp("last_activity_date").getTime());
-        question.setCreationDate(cs.getTimestamp("creation_date").getTime());
-        question.setLastEditDate(cs.getTimestamp("last_edit_date").getTime());
+        question.setLastActivityDate(cs.getLong("last_activity_date"));
+        question.setCreationDate(cs.getLong("creation_date"));
+        question.setLastEditDate(cs.getLong("last_edit_date"));
         question.setLink(cs.getString("link"));
         return question;
     }
