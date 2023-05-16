@@ -202,4 +202,26 @@ public class Question {
   public void setBody(String body) {
     this.body = body;
   }
+
+  @Override
+  public String toString() {
+    return "Question{" +
+            "tags=" + tags +
+            ", owner=" + owner +
+            ", isAnswered=" + isAnswered +
+            ", viewCount=" + viewCount +
+            ", favoriteCount=" + favoriteCount +
+            ", downVoteCount=" + downVoteCount +
+            ", upVoteCount=" + upVoteCount +
+            ", answerCount=" + answerCount +
+            ", score=" + score +
+            ", lastActivityDate=" + lastActivityDate +
+            ", creationDate=" + creationDate +
+            ", lastEditDate=" + lastEditDate +
+            ", questionId=" + questionId +
+            ", link='" + link + '\'' +
+            ", title='" + title + '\'' +
+            ", body='" + body + '\'' +
+            '}';
+  }
 }

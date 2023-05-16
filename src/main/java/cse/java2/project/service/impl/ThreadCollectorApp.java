@@ -4,108 +4,35 @@ import cse.java2.project.domain.model.dto.Comment;
 import cse.java2.project.domain.model.dto.Owner;
 import cse.java2.project.domain.model.dto.StackOverflowThread;
 import cse.java2.project.mapper.StackOverflowThreadMapper;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.postgresql.util.PSQLException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 //添加@Service或@Component注解，以便Spring能够自动检测到它，并将其实例化并添加到容器中
-//@Service
-//public class ThreadCollectorApp {
-//
-//  public static void main(String[] args) {
-//    ThreadCollector threadCollector = new ThreadCollector();
-//    String tag = "java";
-//    int pageSize = 1;
-//    int pageNum = 10;
-//    try {
-//      List<StackOverflowThread> stackOverflowThreads = new ArrayList<>();
-////        for (int i = 1; i <= pageNum; i++) {
-//            stackOverflowThreads.addAll(threadCollector.getStackOverflowThreadsByTag(tag, pageSize, pageNum));
-////        }
-//      String resource = "mybatis-config.xml";
-//      InputStream inputStream = Resources.getResourceAsStream(resource);
-//      SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-//
-//      SqlSession sqlSession = sqlSessionFactory.openSession();
-//      try {
-//        StackOverflowThreadMapper mapper = sqlSession.getMapper(StackOverflowThreadMapper.class);
-//        //插入用户数据
-//        // 插入用户数据
-//        Set<Owner> users = new LinkedHashSet<>();
-//        for (StackOverflowThread thread : stackOverflowThreads) {
-//          users.add(thread.getQuestion().getOwner());
-//          for (Answer answer : thread.getAnswers()) {
-//            users.add(answer.getOwner());
-//          }
-//          for (Comment comment : thread.getComments()) {
-//            users.add(comment.getOwner());
-//          }
-//        }
-//
-//        for (Owner owner : users) {
-//          if (owner.getUserId() != null) {
-//            try {
-//              mapper.insertOwner(owner);
-//            } catch (DuplicateKeyException e) {
-//              System.err.println("Duplicate key found for owner: " + owner.getUserId() + ". Skipping insert.");
-//            }
-//          }
-//        }
-//
-////插入问题数据
-//        for (StackOverflowThread thread : stackOverflowThreads) {
-//          try {
-//            mapper.insertQuestion(thread.getQuestion()); // 调用Mapper中定义的add方法插入数据
-//          } catch (DuplicateKeyException e) {
-//            System.err.println("Duplicate key found for question: " + thread.getQuestion().getQuestionId() + ". Skipping insert.");
-//          }
-//          //插入回答数据
-//          for (Answer answer : thread.getAnswers()) {
-//            try {
-//              mapper.insertAnswer(answer);
-//            } catch (DuplicateKeyException e) {
-//              System.err.println("Duplicate key found for answer: " + answer.getAnswerId() + ". Skipping insert.");
-//            }
-//          }
-//          //插入评论数据
-//          for (Comment comment : thread.getComments()) {
-//            try {
-//              mapper.insertComment(comment, thread.getQuestion().getQuestionId());
-//            } catch (DuplicateKeyException e) {
-//              System.err.println("Duplicate key found for comment: " + comment.getCommentId() + ". Skipping insert.");
-//            }
-//          }
-//        }
-//
-//        sqlSession.commit(); // 提交事务
-//      } finally {
-//        sqlSession.close(); // 关闭SqlSession
-//      }
-//
-//    } catch (IOException e) {
-//      System.err.println("Error retrieving Stack Overflow threads: " + e.getMessage());
-//    }
-//  }
-//}
-
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class ThreadCollectorApp {
 
   public static void main(String[] args) {
     ThreadCollector threadCollector = new ThreadCollector();
     String tag = "java";
-    int pageSize = 1;
-    int pageNum = 10;
+    int pageSize = 10;
+    int pageNumStart = 2;
+    int pageNumEnd = 2;
     String resource = "mybatis-config.xml";
     InputStream inputStream;
     try {
@@ -114,12 +41,12 @@ public class ThreadCollectorApp {
       SqlSession sqlSession = sqlSessionFactory.openSession();
       StackOverflowThreadMapper mapper = sqlSession.getMapper(StackOverflowThreadMapper.class);
 
-      int successCount = 1;
-      while (successCount <= pageNum) {
+      int successCount = pageNumStart;
+      List<StackOverflowThread> stackOverflowThreads = new ArrayList<>();
+
+      while (successCount <= pageNumEnd) {
         try {
-          List<StackOverflowThread> stackOverflowThreads = threadCollector.getStackOverflowThreadsByTag(tag, pageSize, successCount);
-          processData(stackOverflowThreads, mapper);
-          sqlSession.commit(); // 提交事务
+          stackOverflowThreads.addAll(threadCollector.getStackOverflowThreadsByTag(tag, pageSize, successCount));
         } catch (IOException e) {
           System.err.println("Error retrieving Stack Overflow threads: " + e.getMessage());
           // Retry or continue with the next iteration based on your requirements.
@@ -127,12 +54,19 @@ public class ThreadCollectorApp {
         }
         successCount++;
       }
+      processData(stackOverflowThreads, mapper);
+      sqlSession.commit(); // 提交事务
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
   private static void processData(List<StackOverflowThread> stackOverflowThreads, StackOverflowThreadMapper mapper) {
+    List<Integer> ownerIds = mapper.getAllOwnerIds();
+    List<Integer> questionIds = mapper.getAllQuestionIds();
+    List<Integer> answerIds = mapper.getAllAnswerIds();
+    List<Integer> commentIds = mapper.getAllCommentIds();
+
     Set<Owner> users = new LinkedHashSet<>();
     for (StackOverflowThread thread : stackOverflowThreads) {
       users.add(thread.getQuestion().getOwner());
@@ -145,36 +79,66 @@ public class ThreadCollectorApp {
     }
 
     for (Owner owner : users) {
-      if (owner.getUserId() != null) {
+      if (owner.getUserId() != null && !ownerIds.contains(owner.getUserId())) {
         try {
           mapper.insertOwner(owner);
-        } catch (Exception e) {
-          System.err.println("Duplicate key found for owner: " + owner.getUserId() + ". Skipping insert.");
+        } catch (PersistenceException e) {
+          Throwable cause = e.getCause();
+          if (cause instanceof PSQLException) {
+            System.err.println("Owner Duplicate key found. Skipping insert. Owner ID: " + owner.getUserId());
+          } else {
+            // Handle generic persistence exceptions
+            e.printStackTrace();
+          }
         }
       }
     }
 
     for (StackOverflowThread thread : stackOverflowThreads) {
-      try {
-        mapper.insertQuestion(thread.getQuestion());
-      } catch (Exception e) {
-        System.err.println("Duplicate key found for question: " + thread.getQuestion().getQuestionId() + ". Skipping insert.");
-      }
-      for (Answer answer : thread.getAnswers()) {
+      if (thread.getQuestion().getQuestionId() != 0 && !questionIds.contains(thread.getQuestion().getQuestionId())) {
         try {
-          mapper.insertAnswer(answer);
-        } catch (Exception e) {
-          System.err.println("Duplicate key found for answer: " + answer.getAnswerId() + ". Skipping insert.");
+          mapper.insertQuestion(thread.getQuestion());
+        } catch (PersistenceException e) {
+          Throwable cause = e.getCause();
+          if (cause instanceof PSQLException) {
+            System.err.println("Question Duplicate key found. Skipping insert. Question ID: " + thread.getQuestion().getQuestionId());
+          } else {
+            // Handle generic persistence exceptions
+            e.printStackTrace();
+          }
+        }
+      }
+
+      for (Answer answer : thread.getAnswers()) {
+        if (answer.getAnswerId() != 0 && !answerIds.contains(answer.getAnswerId())) {
+          try {
+            mapper.insertAnswer(answer);
+          } catch (PersistenceException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof PSQLException) {
+              System.err.println("Answer Duplicate key found. Skipping insert. Answer ID: " + answer.getAnswerId());
+            } else {
+              // Handle generic persistence exceptions
+              e.printStackTrace();
+            }
+          }
         }
       }
       for (Comment comment : thread.getComments()) {
-        try {
-          mapper.insertComment(comment, thread.getQuestion().getQuestionId());
-        } catch (Exception e) {
-          System.err.println("Duplicate key found for comment: " + comment.getCommentId() + ". Skipping insert.");
+        if (comment.getCommentId() != 0 && !commentIds.contains(comment.getCommentId())) {
+          try {
+            mapper.insertComment(comment, thread.getQuestion().getQuestionId());
+          } catch (PersistenceException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof PSQLException) {
+              System.err.println("Duplicate key found. Skipping insert. Comment ID: " + comment.getCommentId());
+            } else {
+              // Handle generic persistence exceptions
+              e.printStackTrace();
+            }
+          }
         }
       }
     }
   }
-
 }

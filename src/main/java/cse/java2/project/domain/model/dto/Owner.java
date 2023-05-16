@@ -98,4 +98,17 @@ public class Owner {
   public int hashCode() {
     return Objects.hash(userId);
   }
+
+    @Override
+    public String toString() {
+        return "Owner{" +
+                "reputation=" + reputation +
+                ", userId='" + userId + '\'' +
+                ", userType='" + userType + '\'' +
+                ", acceptRate=" + acceptRate +
+                ", profileImage='" + profileImage + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", link='" + link + '\'' +
+                '}';
+    }
 }

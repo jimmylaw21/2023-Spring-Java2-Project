@@ -149,4 +149,23 @@ public class Answer {
   public void setBody(String body) {
     this.body = body;
   }
+
+  @Override
+    public String toString() {
+        return "Answer{" +
+                "owner=" + owner +
+                ", downVoteCount=" + downVoteCount +
+                ", upVoteCount=" + upVoteCount +
+                ", isAccepted=" + isAccepted +
+                ", score=" + score +
+                ", lastActivityDate=" + lastActivityDate +
+                ", lastEditDate=" + lastEditDate +
+                ", creationDate=" + creationDate +
+                ", answerId=" + answerId +
+                ", questionId=" + questionId +
+                ", link='" + link + '\'' +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                '}';
+    }
 }
