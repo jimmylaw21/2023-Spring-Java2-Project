@@ -7,9 +7,7 @@
         INSERT INTO question (question_id, title, body, tags, owner_id, owner_reputation, is_answered, view_count, favorite_count, down_vote_count, up_vote_count, answer_count, score, last_activity_date, creation_date, last_edit_date, link)
         VALUES (#{questionId}, #{title}, #{body}, #{tags}, #{owner.userId}, #{ownerReputation}, #{isAnswered}, #{viewCount}, #{favoriteCount}, #{downVoteCount}, #{upVoteCount}, #{answerCount}, #{score}, #{lastActivityDate}, #{creationDate}, #{lastEditDate}, #{link})
     </insert>
-<!--    <select id="getAllQuestions" resultType="cse.java2.project.domain.model.dto.Question">-->
-<!--        SELECT * FROM question-->
-<!--    </select>-->
+
     <resultMap id="QuestionResultMap" type="cse.java2.project.domain.model.dto.Question">
         <id column="question_id" property="questionId"/>
         <result column="title" property="title"/>
@@ -72,9 +70,5 @@
         <result column="profile_image" property="profileImage"/>
         <result column="link" property="link"/>
     </resultMap>
-
-<!--    <select id="getAllQuestions" resultMap="QuestionResultMap">-->
-<!--        SELECT * FROM question-->
-<!--    </select>-->
 
 </mapper>

@@ -18,8 +18,12 @@ import java.util.stream.Collectors;
 @Service
 public class JavaApiIdentifier implements JavaApiIdentifierIntf {
 
-  @Autowired
   private StackOverflowThreadMapper stackOverflowThreadMapper;
+
+    @Autowired
+    public JavaApiIdentifier(StackOverflowThreadMapper stackOverflowThreadMapper) {
+        this.stackOverflowThreadMapper = stackOverflowThreadMapper;
+    }
 
   @Override
   public List<String> extractCodeSnippets(String text) {

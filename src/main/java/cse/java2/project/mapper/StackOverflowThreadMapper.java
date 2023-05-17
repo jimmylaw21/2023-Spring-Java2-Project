@@ -52,4 +52,17 @@ public interface StackOverflowThreadMapper {
     @Select("SELECT comment_id FROM comment")
     List<Integer> getAllCommentIds();
 
+    @Select("SELECT * FROM owner")
+    List<Owner> getAllOwners();
+
+    @Select("SELECT * FROM answer")
+    List<Answer> getAllAnswers();
+
+    @Select("SELECT * FROM comment")
+    List<Comment> getAllComments();
+
+    @Select("SELECT display_name FROM owner where user_id = #{ownerId}")
+    String getDisplayNameByOwnerId(String ownerId);
+
+
 }

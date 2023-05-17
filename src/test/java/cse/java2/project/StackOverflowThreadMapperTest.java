@@ -1,6 +1,6 @@
 package cse.java2.project;
 
-import cse.java2.project.domain.model.dto.Question;
+import cse.java2.project.domain.model.dto.*;
 import cse.java2.project.mapper.StackOverflowThreadMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public class StackOverflowThreadMapperTest {
 
-//    @Autowired
+    //    @Autowired
 //    private StackOverflowThreadMapper stackOverflowThreadMapper;
     String resource = "mybatis-config.xml";
     InputStream inputStream = Resources.getResourceAsStream(resource);
@@ -61,7 +61,7 @@ public class StackOverflowThreadMapperTest {
         // Call the method to get all question bodies
         List<Question> questions = mapper.getAllQuestions();
 
-       System.out.println(questions.get(0));
+        System.out.println(questions.get(0));
 
         questions.stream().forEach(a-> System.out.println(a.getQuestionId()));
 
@@ -72,6 +72,36 @@ public class StackOverflowThreadMapperTest {
         assertThat(questions).isNotEmpty();
 
         // Add any additional assertions as needed, e.g., checking specific data points
+    }
+
+    @Test
+    public void getAllOwnerTest(){
+        List<Owner> owners = mapper.getAllOwners();
+
+        System.out.println(owners.get(0));
+
+        System.out.println(owners.get(1));
+
+        // Check that the result is not null
+        assertThat(owners).isNotNull();
+
+        // Check that the result is not empty
+        assertThat(owners).isNotEmpty();
+    }
+
+    @Test
+    public void getAllAnswerTest(){
+        List<Answer> answers = mapper.getAllAnswers();
+
+        System.out.println(answers.get(0));
+
+        System.out.println(answers.get(1));
+
+        // Check that the result is not null
+        assertThat(answers).isNotNull();
+
+        // Check that the result is not empty
+        assertThat(answers).isNotEmpty();
     }
 
     @Test
@@ -103,4 +133,3 @@ public class StackOverflowThreadMapperTest {
     }
 
 }
-

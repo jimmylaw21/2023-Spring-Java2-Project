@@ -4,9 +4,15 @@ import cse.java2.project.domain.model.dto.Answer;
 import cse.java2.project.domain.model.dto.Question;
 import cse.java2.project.mapper.StackOverflowThreadMapper;
 import cse.java2.project.service.intf.DataAnalyzerIntf;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,12 +24,15 @@ import java.util.stream.Collectors;
 @Service
 public class DataAnalyzer implements DataAnalyzerIntf {
 
-  private final StackOverflowThreadMapper stackOverflowThreadMapper;
+  String resource = "mybatis-config.xml";
+  InputStream inputStream = Resources.getResourceAsStream(resource);
+  SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+  SqlSession sqlSession = sqlSessionFactory.openSession();
+  StackOverflowThreadMapper stackOverflowThreadMapper = sqlSession.getMapper(StackOverflowThreadMapper.class);
 
   @Autowired
-  public DataAnalyzer(StackOverflowThreadMapper stackOverflowThreadMapper) {
+  public DataAnalyzer(StackOverflowThreadMapper stackOverflowThreadMapper) throws IOException {
 
-    this.stackOverflowThreadMapper = stackOverflowThreadMapper;
   }
 
   @Override
@@ -187,9 +196,8 @@ public class DataAnalyzer implements DataAnalyzerIntf {
     List<String> mostActiveUsers = new ArrayList<>();
 
     for (Map<String, Object> userData : mostActiveUsersData) {
-      mostActiveUsers.add((String) userData.get("owner_id"));
+      mostActiveUsers.add(stackOverflowThreadMapper.getDisplayNameByOwnerId((String) userData.get("owner_id")));
     }
-
     return mostActiveUsers;
   }
 

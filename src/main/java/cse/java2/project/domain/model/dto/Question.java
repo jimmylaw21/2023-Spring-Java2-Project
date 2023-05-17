@@ -3,11 +3,12 @@ package cse.java2.project.domain.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Question {
+public class Question implements Serializable {
 
 //  public Question() {
 //    // 初始化 tags 列表
@@ -202,6 +203,26 @@ public class Question {
   public void setBody(String body) {
     this.body = body;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (this == obj) {
+      return true;
+    }
+    if (obj instanceof Question) {
+      Question question = (Question) obj;
+      return this.questionId == question.questionId;
+    }
+    return false;
+  }
+
+  @Override
+    public int hashCode() {
+        return this.questionId;
+    }
 
   @Override
   public String toString() {

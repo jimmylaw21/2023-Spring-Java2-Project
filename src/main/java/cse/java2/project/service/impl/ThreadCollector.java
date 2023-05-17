@@ -70,7 +70,6 @@ public class ThreadCollector {
     }
     stackOverflowThread.setAnswers(answers);
 
-
     stackOverflowThread.setComments(comments);
 
     return stackOverflowThread;
@@ -83,7 +82,6 @@ public class ThreadCollector {
         + "&key=" + KEY + "&filter=" + fliter.fliter;
 
     String responseJson = fetchContentFromUrl(queryUrl);
-    System.out.println(responseJson);
     StackOverflowWrapper<Question> stackOverflowWrapper = objectMapper.readValue(responseJson, objectMapper.getTypeFactory().constructParametricType(StackOverflowWrapper.class, Question.class));
 
     return stackOverflowWrapper.getItems();

@@ -110,4 +110,3 @@ public class QuestionTypeHandler extends BaseTypeHandler<Question> {
         return question;
     }
 }
-

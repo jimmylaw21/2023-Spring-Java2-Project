@@ -3,8 +3,10 @@ package cse.java2.project.domain.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Comment {
+public class Comment implements Serializable {
   @JsonProperty("owner")
   private Owner owner;
 
@@ -83,6 +85,28 @@ public class Comment {
   public void setBody(String body) {
     this.body = body;
   }
+
+  //比较commentId来判断是否相等
+  @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Comment) {
+            Comment comment = (Comment) obj;
+            return this.commentId == comment.commentId;
+        }
+        return false;
+    }
+
+  @Override
+  public int hashCode() {
+    return commentId;
+  }
+
 
   @Override
     public String toString() {

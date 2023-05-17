@@ -3,8 +3,10 @@ package cse.java2.project.domain.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Answer {
+public class Answer implements Serializable {
   @JsonProperty("owner")
   private Owner owner;
 
@@ -149,6 +151,28 @@ public class Answer {
   public void setBody(String body) {
     this.body = body;
   }
+
+  //比较两个Answer对象的awswerId是否相等
+  @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Answer) {
+            Answer answer = (Answer) obj;
+            return this.answerId == answer.answerId;
+        }
+        return false;
+    }
+
+  @Override
+  public int hashCode() {
+    return answerId;
+  }
+
 
   @Override
     public String toString() {

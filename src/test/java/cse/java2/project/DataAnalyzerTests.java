@@ -1,6 +1,7 @@
 package cse.java2.project;
 
 import cse.java2.project.service.impl.DataAnalyzer;
+import cse.java2.project.service.impl.JavaApiIdentifier;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -29,6 +30,9 @@ public class DataAnalyzerTests {
     @Autowired
     private DataAnalyzer dataAnalyzer;
 
+    @Autowired
+    private JavaApiIdentifier javaApiIdentifier;
+
     String resource = "mybatis-config.xml";
     InputStream inputStream = Resources.getResourceAsStream(resource);
     SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
@@ -39,8 +43,9 @@ public class DataAnalyzerTests {
     }
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         dataAnalyzer = new DataAnalyzer(mapper);
+        javaApiIdentifier = new JavaApiIdentifier(mapper);
 //        Question q1 = new Question();
 //        q1.setAnswerCount(3);
 //
@@ -121,6 +126,12 @@ public class DataAnalyzerTests {
     @Test
     public void testGetMostActiveUsers() {
         List<String> result = dataAnalyzer.getMostActiveUsers();
+        System.out.println(result);
+    }
+
+    @Test
+    public void testGetMostUsedJavaApi() {
+        Map<String, Integer> result = javaApiIdentifier.getMostUsedJavaApi();
         System.out.println(result);
     }
 }
