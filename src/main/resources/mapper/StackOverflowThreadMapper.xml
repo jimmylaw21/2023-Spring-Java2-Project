@@ -31,7 +31,8 @@
         INSERT INTO answer (answer_id, question_id, owner_id, down_vote_count, up_vote_count, is_accepted, score, last_activity_date, last_edit_date, creation_date, link, title, body)
         VALUES (#{answerId}, #{questionId}, #{owner.userId}, #{downVoteCount}, #{upVoteCount}, #{isAccepted}, #{score}, #{lastActivityDate}, #{lastEditDate}, #{creationDate}, #{link}, #{title}, #{body})
     </insert>
-    <resultMap id="AnswerResultMap" type="cse.java2.project.domain.model.dto.Answer">
+
+    <resultMap id="AnswerResultMap" type="cse.java2.project.domain.model.dto.Answer" >
         <id column="answer_id" property="answerId"/>
         <result column="question_id" property="questionId"/>
         <result column="owner_id" property="owner.userId" />

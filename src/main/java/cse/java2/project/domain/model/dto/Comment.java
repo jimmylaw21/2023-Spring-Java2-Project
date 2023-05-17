@@ -28,8 +28,14 @@ public class Comment implements Serializable {
   @JsonProperty("body")
   private String body;
 
+  private int questionId;
   // Getters and setters for all fields
-
+  public int getQuestionId() {
+    return questionId;
+  }
+  public void setQuestionId(int questionId) {
+    this.questionId = questionId;
+  }
   public Owner getOwner() {
     return owner;
   }

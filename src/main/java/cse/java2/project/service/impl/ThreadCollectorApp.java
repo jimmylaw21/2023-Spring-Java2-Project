@@ -64,6 +64,7 @@ public class ThreadCollectorApp {
             }
           }
           for (Comment comment : thread.getComments()) {
+            comment.setQuestionId(thread.getQuestion().getQuestionId());
             if (comment.getOwner() != null) {
               owners.add(comment.getOwner());
             }

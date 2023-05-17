@@ -94,7 +94,9 @@ public class ThreadStorageApp {
             , Set<Question> questions) {
         for (Owner owner : owners) {
             try {
-                mapper.insertOwner(owner);
+                if(owner.getUserId() != null) {
+                    mapper.insertOwner(owner);
+                }
             } catch (PersistenceException e) {
                 e.printStackTrace();
             }
@@ -118,7 +120,7 @@ public class ThreadStorageApp {
 
         for (Comment comment : comments) {
             try {
-                mapper.insertComment(comment, comment.getPostId());
+                mapper.insertComment(comment,comment.getQuestionId());
             } catch (PersistenceException e) {
                 e.printStackTrace();
             }
