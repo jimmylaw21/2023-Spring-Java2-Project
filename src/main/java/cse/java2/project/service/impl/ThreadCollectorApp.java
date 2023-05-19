@@ -32,15 +32,15 @@ public class ThreadCollectorApp {
     serializeData(fileName);
   }
 
-  private static void serializeData(String[] fileName) throws IOException {
+  private static void serializeData(String[] fileName){
 
     long startTime = System.currentTimeMillis();
 
     ThreadCollector threadCollector = new ThreadCollector();
     String tag = "java";
-    int pageSize = 2;
-    int pageNumStart = 1;
-    int pageNumEnd = 1;
+    int pageSize = 10;
+    int pageNumStart = 46;
+    int pageNumEnd = 50;
 
     Set<Owner> owners = readDataFromFile(fileName[0]);
     Set<Comment> comments = readDataFromFile(fileName[1]);
