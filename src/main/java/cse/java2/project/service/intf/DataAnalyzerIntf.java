@@ -27,6 +27,8 @@ public interface DataAnalyzerIntf {
 
   // Users
   Map<Integer, Integer> getDistributionOfUserParticipation();
+  Map<Integer, Integer> getDistributionOfAnswerUserParticipation();
+  Map<Integer, Integer> getDistributionOfCommentUserParticipation();
   List<String> getMostActiveUsers();
 }
 

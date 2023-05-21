@@ -22,6 +22,9 @@ public interface StackOverflowThreadMapper {
     @Select("SELECT * FROM answer WHERE question_id = #{questionId}")
     List<Answer> getAnswersByQuestionId(int questionId);
 
+    @Select("SELECT * FROM comment WHERE question_id = #{questionId}")
+    List<Comment> getCommentsByQuestionId(int questionId);
+
     @Select("SELECT * FROM question")
     List<Question> getAllQuestions();
 
@@ -30,6 +33,12 @@ public interface StackOverflowThreadMapper {
 
     @Select("SELECT DISTINCT owner_id FROM (SELECT owner_id, question_id FROM question UNION ALL SELECT owner_id, question_id FROM answer UNION ALL SELECT owner_id, post_id as question_id FROM comment) AS temp WHERE temp.question_id = #{questionId}")
     List<String> getParticipantsByQuestionId(int questionId);
+
+    @Select("SELECT DISTINCT owner_id FROM (SELECT owner_id, answer_id FROM answer) AS temp WHERE temp.answer_id = #{answerId}")
+    List<String> getParticipantsByAnswerId(int answerId);
+
+    @Select("SELECT DISTINCT owner_id FROM (SELECT owner_id, comment_id FROM comment) AS temp WHERE temp.comment_id = #{commentId}")
+    List<String> getParticipantsByCommentId(int commentId);
 
     @Select("SELECT owner_id, COUNT(*) as participation_count FROM (SELECT owner_id FROM question UNION ALL SELECT owner_id FROM answer UNION ALL SELECT owner_id FROM comment) AS temp GROUP BY owner_id ORDER BY participation_count DESC LIMIT #{limit}")
     List<Map<String, Object>> getMostActiveUsersWithLimit(int limit);

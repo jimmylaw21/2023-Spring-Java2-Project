@@ -134,9 +134,24 @@ public class DataAnalyzerTests {
         System.out.println(result);
     }
 
+    //x + y + 1
     @Test
     public void testGetDistributionOfUserParticipation() {
         Map<Integer, Integer> result = dataAnalyzer.getDistributionOfUserParticipation();
+        System.out.println(result);
+    }
+
+    //x
+    @Test
+    public void testGetDistributionOfAnswerUserParticipation(){
+        Map<Integer, Integer> result = dataAnalyzer.getDistributionOfAnswerUserParticipation();
+        System.out.println(result);
+    }
+
+    //y
+    @Test
+    public void testGetDistributionOfCommentUserParticipation(){
+        Map<Integer, Integer> result = dataAnalyzer.getDistributionOfCommentUserParticipation();
         System.out.println(result);
     }
 

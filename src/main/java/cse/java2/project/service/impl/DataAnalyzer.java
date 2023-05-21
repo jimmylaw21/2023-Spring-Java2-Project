@@ -1,6 +1,7 @@
 package cse.java2.project.service.impl;
 
 import cse.java2.project.domain.model.dto.Answer;
+import cse.java2.project.domain.model.dto.Comment;
 import cse.java2.project.domain.model.dto.Question;
 import cse.java2.project.mapper.StackOverflowThreadMapper;
 import cse.java2.project.service.intf.DataAnalyzerIntf;
@@ -252,6 +253,45 @@ public class DataAnalyzer implements DataAnalyzerIntf {
 
     return threadParticipationCount;
   }
+
+  @Override
+  public Map<Integer, Integer> getDistributionOfAnswerUserParticipation() {
+    List<Integer> questionIds = stackOverflowThreadMapper.getAllQuestionIds();
+    Map<Integer, Integer> answerParticipationCount = new HashMap<>();
+
+    for (Integer questionId : questionIds) {
+      List<Answer> answers = stackOverflowThreadMapper.getAnswersByQuestionId(questionId);
+      int count = 0;
+        for (Answer answer : answers) {
+            List<String> participants = stackOverflowThreadMapper.getParticipantsByAnswerId(answer.getAnswerId());
+            count += participants.size();
+        }
+      answerParticipationCount.put(count, answerParticipationCount.getOrDefault(count, 0) + 1);
+    }
+
+    return answerParticipationCount;
+  }
+
+  @Override
+  public Map<Integer, Integer> getDistributionOfCommentUserParticipation() {
+    List<Integer> questionIds = stackOverflowThreadMapper.getAllQuestionIds();
+    Map<Integer, Integer> commentParticipationCount = new HashMap<>();
+
+    for (Integer questionId : questionIds) {
+      List<Comment> comments = stackOverflowThreadMapper.getCommentsByQuestionId(questionId);
+      int count = 0;
+      for (Comment comment : comments) {
+        List<String> participants = stackOverflowThreadMapper.getParticipantsByCommentId(comment.getCommentId());
+        count += participants.size();
+      }
+      commentParticipationCount.put(count, commentParticipationCount.getOrDefault(count, 0) + 1);
+    }
+
+    return commentParticipationCount;
+  }
+
+
+
 
   @Override
   public List<String> getMostActiveUsers() {
