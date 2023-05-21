@@ -1,236 +1,845 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="1000;url=''">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-    <title>Document</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <!--  Import jQuery lib by CDN, you can also import from local files  -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!--  Import the data files  -->
-    <script src='../js/wordcloud-demo.js'></script>
-    <script src='../js/piechart-demo.js'></script>
-    <script src='../js/init.js'></script>
+    <meta charset="utf-8">
+    <title>政务大数据共享交换平台</title>
+	<script src="/js/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js" integrity="sha256-PRbDoi//4nBAaq7sIfxyRT3anw7tVuazUIAyHkk1Y5M=" crossorigin="anonymous"></script>
+	<link href='../static/css/test-1024.css' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="/js/test-1024.js"></script>
 </head>
 
 <body>
-<!-- 头部模块 -->
-<header>
-    <h1><span>数据可视化页面设计</span></h1>
-    <p><span>Data visualization page design</span></p>
-</header>
+<div class="container-header">
+    <ul class="nowTime">
+        <li></li>
+        <li></li>
+    </ul>
+    <div class="location">
+        <i class="icon iconfont icon-buoumaotubiao23"></i>
+        <span class="areaName"></span>
+    </div>
+    <h3>StackOverflow DataAnalyzer</h3>
+</div>
+<div class="container-content">
+    <div class="top">
+		<div class="count-base" >
+			<div class="com-count-title">Number of questions answered</div>
+			<div class="com-screen-content">
+				
+				<div id="main1" style="width:100%;height:150px;"></div>
+				<div id="main1-1" style="width:100%;height:150px;"></div>
+			</div>
+			<span class="left-top"></span>
+			<span class="right-top"></span>
+			<span class="left-bottom"></span>
+			<span class="right-bottom"></span>
+		</div>
+		<div class="count-resource q1">
+			<div class="com-count-title">Number of answers</div>
+			<div class="com-screen-content2">
+				<ul class="use-data">
+					<li>
+						<p id="averageValue" class="data-count"></p>
+						<span class="data-name">总平均值</span>
+					</li>
+					<li>
+						<p id="maxValue" class="data-count"></p>
+						<span class="data-name">总最大值</span>
+					</li>
+				</ul>
+				<div class="com-screen-content">
+				 <div id="main2" style="margin-top:10px;width:100%;height:240px;"></div>
+				</div>
+				<span class="left-top"></span>
+				<span class="right-top"></span>
+				<span class="left-bottom"></span>
+				<span class="right-bottom"></span>
+			</div>
+		</div>
+		<div class="count-resource q2">
+			<div class="com-count-title">tags</div>
+			
+				
+			<div class="com-screen-content">
+				<ul class="data-label">
+					<li class="active" data-type="1">和"java"一起出现</li>
+					<li data-type="2">最多upvotes</li>
+					<li data-type="3">最多views</li>
+				</ul>
+			   <div id="main3" style="margin-top:10px;width:100%;height:240px;"></div>
+			</div>
+			<span class="left-top"></span>
+			<span class="right-top"></span>
+			<span class="left-bottom"></span>
+			<span class="right-bottom"></span>
+		</div>
+    </div>
 
-<div class="main">
-    <!-- top5 -->
-    <div class="top5">
-        <div class="top5-title">
-            <span>地区平均库存TOP5</span>
-        </div>
-        <div class="top5-content">
-            <ul>
-                <li>
-                    <div class="cicle"></div>
-                    <div class="li-content">
-                        <span>中国东部</span>
-                        <span>594.2</span>
-                        <span>82%</span>
-                        <span><img src="./images/up.png" ></span>
-                    </div>
-                </li>
-                <li>
-                    <div class="cicle"></div>
-                    <div class="li-content">
-                        <span>中国北部</span>
-                        <span>521.9</span>
-                        <span>82%</span>
-                        <span><img src="./images/up.png" ></span>
-                    </div>
-                </li>
-                <li>
-                    <div class="cicle"></div>
-                    <div class="li-content">
-                        <span>亚洲</span>
-                        <span>494.5</span>
-                        <span>82%</span>
-                        <span><img src="./images/up.png" ></span>
-                    </div>
-                </li>
-                <li>
-                    <div class="cicle"></div>
-                    <div class="li-content">
-                        <span>欧洲</span>
-                        <span>493.4</span>
-                        <span>82%</span>
-                        <span><img src="./images/up.png" ></span>
-                    </div>
-                </li>
-                <li>
-                    <div class="cicle"></div>
-                    <div class="li-content">
-                        <span>中国西南部</span>
-                        <span>473.2</span>
-                        <span>82%</span>
-                        <span><img src="./images/down.png" ></span>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="top5-title">
-            <span>大类销售分析</span>
-        </div>
-    </div>
-    <!-- 销售总额 -->
-    <div class="total">
-        <div class="data1">
-            <span>年销售</span>
-            <p>5684710411</p>
-        </div>
-        <div class="data2">
-            <span>月销售</span>
-            <p>1457104</p>
-        </div>
-        <div class="data3">
-            <span>周销售</span>
-            <p>564710</p>
-        </div>
-        <div class="data4">
-            <span>日销售</span>
-            <p>14504</p>
-        </div>
-        <canvas class="rain"></canvas>
-        <canvas class="dashed"></canvas>
-        <div class="sphere">
-            <div class="sphere-bg"></div>
-            <div class="sum">
-                <span>销售总额</span>
-                <p>568971401</p>
-            </div>
-        </div>
-        <div class="cicle3"></div>
-        <div class="cicle4"></div>
-        <div class="cicle5"></div>
-        <div class="cicle6"></div>
-        <div class="cicle7"></div>
-        <div class="cicle8">
-            <span>89%</span>
-            <p>同比</p>
-        </div>
-        <div class="cicle9">
-            <span>89%</span>
-            <p>完成率</p>
-        </div>
-        <div class="cicle10">
-            <span>89%</span>
-            <p>售罄率</p>
-        </div>
-        <div class="cicle11">
-            <span>89%</span>
-            <p>折扣率</p>
-        </div>
-    </div>
-    <!-- 会销分析 -->
-    <div class="analyse">
-        <div class="analyse-title">
-            <span>数据查询</span>
-        </div>
-        <ul>
-            <li>
-                <img src="./images/s1.png" >
-                <h5>SUSTC基本信息</h5><br>
-                <span><form method="get" action="/send-query">
-                        <input type="text" name="Origin" placeholder="Contract-?" spellcheck="true"/>
-                        <input type="submit" value="submit"/>
-                    </form></span><br>
-                <em>￥4,374,266</em>
-            </li>
-            <li>
-                <img src="./images/s3.png" >
-                <h5>订单和存货信息</h5><br>
-                <span><form method="get" action="/send-query">
-                        <input type="text" name="Stock&Order" placeholder="Stock-?" spellcheck="true"/>
-                        <input type="submit" value="submit"/>
-                    </form></span><br>
-                <em>￥4,374,266</em>
-            </li>
-            <li>
-                <img src="./images/s2.png" >
-                <h5>查看账单</h5><br>
-                <span><form method="get" action="/send-query">
-                        <input type="text" name="Bill" placeholder="Stock-?" spellcheck="true"/>
-                        <input type="submit" value="submit"/>
-                    </form></span><br>
-                <em>￥4,374,266</em>
-            </li>
-        </ul>
-        <div class="execution">
-            <div class="title">完成情况</div>
-            <div class="cicle1"></div>
-            <div class="cicle2"></div>
-            <div class="waterChart1">
-                <div class="chart-title">会销完成率</div>
-                <div class="chart1"></div>
-            </div>
-            <div class="waterChart2">
-                <div class="chart-title">会销占比</div>
-                <div class="chart2"></div>
-            </div>
-        </div>
-    </div>
-    <!-- 鞋服配销售分析 -->
-    <div class="sale">
-        <ul>
-            <li>
-                <div class="showImg">
-                    <img src="./images/shoe.png" >
-                </div>
-                <div class="data">
-                    <span>鞋类</span>
-                    <span>52563</span>
-                </div>
-                <div class="shoeChart"></div>
-            </li>
-            <li>
-                <div class="showImg">
-                    <img src="./images/clothes.png" >
-                </div>
-                <div class="data">
-                    <span>服装</span>
-                    <span>32563</span>
-                </div>
-                <div class="clothesChart"></div>
-            </li>
-            <li>
-                <div class="showImg">
-                    <img src="./images/mz.png" >
-                </div>
-                <div class="data">
-                    <span>配饰</span>
-                    <span>12563</span>
-                </div>
-                <div class="mzChart"></div>
-            </li>
-        </ul>
-    </div>
-    <!-- 折线图 -->
-    <div class="lineChart">
-
-    </div>
+	<div class="mid">
+		<div class="count-share w1" >
+			<div class="com-count-title">数据共享次数</div>
+			<div class="com-screen-content">
+				    <div class="topRec_List">
+						<dl>
+							<dd>资源名称</dd>
+							<dd>调用方</dd>
+							<dd>调用时间</dd>
+						</dl>
+						<div class="maquee">
+							<ul>
+								<li>
+									<div>审计局主要职责</div>
+									<div>审计局</div>
+									<div>08:20:26 </div>
+								</li> 
+								<li>
+								
+									<div>残联主要职责</div>
+									<div>残联</div>
+									<div>08:20:36 </div>
+								</li> 
+								<li>
+									
+									<div>委老干部局主要职责</div>
+									<div>老干部局</div>
+									<div>08:20:46 </div>
+								</li> 
+								<li>		
+									<div>公安局主要职责</div>
+									<div>公安局</div>
+									<div>08:20:56</div>
+								</li> 
+								<li>							
+									<div>更多精美大屏</div>
+									<div>关注公众号</div>
+									<div>DreamCoders</div>
+								</li> 
+								<li>									
+									<div>交通运输局主要职责</div>
+									<div>完全免费分享</div>
+									<div>08:21:07</div>
+								</li> 
+							</ul>
+						</div>
+					</div>
+			</div>
+			<span class="left-top"></span>
+			<span class="right-top"></span>
+			<span class="left-bottom"></span>
+			<span class="right-bottom"></span>
+		</div>
+		<div class="count-share w2" >
+			<div class="com-count-title">answers分布</div>
+			<div class="com-screen-content">
+			 <div id="main5" style="width:100%;height:300px;"></div>
+			</div>
+			<span class="left-top"></span>
+			<span class="right-top"></span>
+			<span class="left-bottom"></span>
+			<span class="right-bottom"></span>
+		</div>
+	</div>
+	
+	<div class="bottom">
+		<div class="count-topic e1" >
+			<div class="com-count-title">问题解决时间间隔分布</div>
+			<div class="com-screen-content">
+			<div id="main6" style="width:100%;height:300px;"></div>
+			</div>
+			<span class="left-top"></span>
+			<span class="right-top"></span>
+			<span class="left-bottom"></span>
+			<span class="right-bottom"></span>
+		</div>
+		<div class="count-topic e2" >
+			<div class="com-count-title">用户参与java thread讨论的分布</div>
+			<div class="com-screen-content">
+			 <div id="main7" style="width:100%;height:300px;"></div>
+			</div>
+			<span class="left-top"></span>
+			<span class="right-top"></span>
+			<span class="left-bottom"></span>
+			<span class="right-bottom"></span>
+		</div>
+	</div>
+	<div class="clearfix"></div>
 </div>
 
-<!-- 底部模块 -->
-<div class="bottom">
-    <h5><span>数据状况</span></h5>
-    <p>Data Status</p>
-</div>
+<script type="text/javascript">
+//根据不同的分辨率调用不同的css和js
+
+	    document.write("<link href='/css/test-1024.css' rel='stylesheet' type='text/css'>");
+
+		document.writeln("<script type=\"text/javascript\" src=\"/js/test-1024.js\"><\/script>");
+
+</script>
+<!--大屏-->
+<script type="text/javascript">
+	  function autoScroll(obj){
+			$(obj).find("ul").animate({
+				marginTop : "-39px"
+			},500,function(){
+				$(this).css({marginTop : "0px"}).find("li:first").appendTo(this);
+			})
+		}
+		$(function(){
+			setInterval('autoScroll(".maquee")',2000);
+		})
+</script>
+
+<script>
+	var myChart1=echarts.init(document.getElementById('main1'));
+	function updateChart(){
+		$.ajax({
+			url:"/percentage-of-questions-with-accepted-answers",
+			success:function (data) {
+				var values=data.split(" ");
+				option = {
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					color: ['#8fc31f', '#f35833', '#00ccff', '#ffcc00', '#f5e965', '#a74faf', '#ff9668'],
+					series: [
+						{
+							name: '',
+							type: 'pie',
+							radius: '45%',
+							center: ['50%', '50%'],
+							data: [
+								{value: parseInt(values[0]), name: '有accepted answer的问题'},
+								{value: parseInt(values[1]), name: '没有accepted answer的问题'},
+							],
+							itemStyle: {
+								emphasis: {
+									shadowBlur: 10,
+									shadowOffsetX: 0,
+									shadowColor: 'rgba(0, 0, 0, 0.5)'
+								}
+							},
+							itemStyle: {
+								normal: {
+									label: {
+										show: true,
+										//	                            position:'inside',
+										formatter: '{b} : {c} ({d}%)',
+										fontSize: 12,    //文字的字体大小
+										color: 'inherit'
+									}
+								},
+								labelLine: {show: true}
+							}
+						}
+					]
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart1.setOption(option);
+			}
+		});
+	}
+	// 初始加载图表并定时更新
+	updateChart();
+	setInterval(updateChart, 50000); // 每5秒更新一次图表
+</script>
+//两个饼状图
+<script>
+	var myChart1_1=echarts.init(document.getElementById('main1-1'));
+	function updateChart(){
+		$.ajax({
+			url:"/percentage-of-questions-without-answers",
+			success:function (data) {
+				var values=data.split(" ");
+				option = {
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					color: [ '#00ccff', '#ffcc00', '#f5e965', '#a74faf', '#ff9668'],
+					series: [
+						{
+							name: '',
+							type: 'pie',
+							radius: '45%',
+							center: ['50%', '50%'],
+							data: [
+								{value: parseInt(values[0]), name: '有answer的问题'},
+								{value: parseInt(values[1]), name: '没有answer的问题'},
+							],
+							itemStyle: {
+								emphasis: {
+									shadowBlur: 10,
+									shadowOffsetX: 0,
+									shadowColor: 'rgba(0, 0, 0, 0.5)'
+								}
+							},
+							itemStyle: {
+								normal: {
+									label: {
+										show: true,
+										//	                            position:'inside',
+										formatter: '{b} : {c} ({d}%)',
+										fontSize: 12,    //文字的字体大小
+										color: 'inherit'
+									}
+								},
+								labelLine: {show: true}
+							}
+						}
+					]
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart1_1.setOption(option);
+			}
+		});
+	}
+	// 初始加载图表并定时更新
+	updateChart();
+	setInterval(updateChart, 50000); // 每5秒更新一次图表
+</script>
+//显示最大值和平均值
+<script>
+	// 获取数值的方法，这里仅作示例，你需要根据实际情况替换为正确的数值获取逻辑
+	function getAverageValue(callback) {
+		$.ajax({
+			url: "/average-number-of-answers",
+			success: function (data) {
+				callback(data);
+			}
+		});
+	}
+
+	function getMaxValue(callback) {
+		$.ajax({
+			url: "/maximum-number-of-answers",
+			success: function (data) {
+				callback(data);
+			}
+		});
+	}
+
+	// 更新数值的方法
+	function updateValues() {
+		// 获取总平均值和总最大值的元素
+		var averageValueElement = document.getElementById("averageValue");
+		var maxValueElement = document.getElementById("maxValue");
+
+		// 获取数值并更新元素内容
+		getMaxValue(function (maxValue) {
+			maxValueElement.innerText = maxValue;
+		});
+
+		getAverageValue(function (averageValue) {
+			averageValueElement.innerText = averageValue;
+		});
+	}
+	updateValues();
+	setInterval(updateValues, 50000); // 每5秒更新一次图表
+</script>
+//显示最大值和平均值的分布图
+<script>
+	var myChart2 = echarts.init(document.getElementById('main2'));
+	function getAverage(callback) {
+		$.ajax({
+			url: "/average-number-distribution-of-answers",
+			success: function (data) {
+				callback(data);
+			}
+		});
+	}
+	function getMax(callback) {
+		$.ajax({
+			url: "/maximum-number-distribution-of-answers",
+			success: function (data) {
+				callback(data);
+			}
+		});
+	}
+	var avgCnt = [];
+	var maxCnt = [];
+	var years = [];
+	getAverage(function (data){
+		years = Object.keys(data);
+		avgCnt = years.map(function (key) {
+			return data[key];
+		});
+		// 调用第二个异步请求
+		getMax(function (data1) {
+			maxCnt = Object.values(data1);
+
+			// 处理完所有数据后执行图表更新操作
+			updateChart2();
+		});
+	});
+	function updateChart2() {
+
+		option = {
+
+			tooltip: {
+				trigger: 'axis',
+				formatter: function (params, ticket, callback) {
+					var res = '';
+					for (var i = 0, l = params.length; i < l; i++) {
+						res += '' + params[i].seriesName + ' : ' + params[i].value + '<br>';
+					}
+					return res;
+				},
+				transitionDuration: 0,
+				backgroundColor: 'rgba(83,93,105,0.8)',
+				borderColor: '#535b69',
+				borderRadius: 8,
+				borderWidth: 2,
+				padding: [5, 10],
+				axisPointer: {
+					type: 'line',
+					lineStyle: {
+						type: 'dashed',
+						color: '#ffff00'
+					}
+				}
+			},
+			legend: {
+				icon: 'circle',
+				itemWidth: 8,
+				itemHeight: 8,
+				itemGap: 10,
+				top: '16',
+				right: '10',
+				data: ['平均值','最大值'],
+				textStyle: {
+					fontSize: 10,
+					color: '#a0a8b9'
+				}
+			},
+			grid: {
+				top:'46',
+				left: '13%',
+				right: '10',
+				//bottom: '10%',
+				containLabel: false
+			},
+			xAxis: [{
+				type: 'category',
+				boundaryGap: false,
+				axisLabel: {
+					interval: 0,
+					fontSize:10
+				},
+				axisLine: {
+					show: false,
+					lineStyle: {
+						color: '#a0a8b9'
+					}
+				},
+				axisTick: {
+					show: false
+				},
+				data: years,
+				offset: 10
+			}],
+			yAxis: [{
+				type: 'value',
+				axisLine: {
+					show: false,
+					lineStyle: {
+						color: '#a0a8b9'
+					}
+				},
+				axisLabel: {
+					margin: 10,
+					textStyle: {
+						fontSize: 10
+					}
+				},
+				splitLine: {
+					lineStyle: {
+						color: '#2b3646'
+					}
+				},
+				axisTick: {
+					show: false
+				}
+			}],
+			series: [{
+				name: '平均值',
+				type: 'line',
+				smooth: true,
+				showSymbol: false,
+				lineStyle: {
+					normal: {
+						width: 2
+					}
+				},
+				areaStyle: {
+					normal: {
+						color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+							offset: 0,
+							color: 'rgba(137, 189, 27, 0.3)'
+						}, {
+							offset: 0.8,
+							color: 'rgba(137, 189, 27, 0)'
+						}], false),
+						shadowColor: 'rgba(0, 0, 0, 0.1)',
+						shadowBlur: 10
+					}
+				},
+				itemStyle: {
+					normal: {
+						color: '#1cc840'
+					}
+				},
+				data: avgCnt
+			}, {
+				name: '最大值',
+				type: 'line',
+				smooth: true,
+				showSymbol: false,
+				lineStyle: {
+					normal: {
+						width: 2
+					}
+				},
+				areaStyle: {
+					normal: {
+						color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+							offset: 0,
+							color: 'rgba(219, 50, 51, 0.3)'
+						}, {
+							offset: 0.8,
+							color: 'rgba(219, 50, 51, 0)'
+						}], false),
+						shadowColor: 'rgba(0, 0, 0, 0.1)',
+						shadowBlur: 10
+					}
+				},
+				itemStyle: {
+					normal: {
+						color: '#eb5690'
+					}
+				},
+				data: maxCnt
+			}
+			]
+		};
+		myChart2.setOption(option);
+	}
+	// 初始加载图表并定时更新
+	updateChart2();
+	setInterval(updateChart2, 50000); // 每5秒更新一次图表
+</script>
+//tags三个词云
+<script>
+	var myChart3 = echarts.init(document.getElementById('main3'));
+	function getWithJavaTags(callback) {
+		$.ajax({
+			url: "/frequent-tags",
+			success: function (data) {
+				callback(data);
+			}
+		});
+	}
+	function getUpvoteTags(callback) {
+		$.ajax({
+			url: "/most-upvoted-tags",
+			success: function (data) {
+				callback(data);
+			}
+		});
+	}
+	function getViewTags(callback) {
+		$.ajax({
+			url: "/most-viewed-tags",
+			success: function (data) {
+				callback(data);
+			}
+		});
+	}
+	let java_data ;
+	let upvotes_data ;
+	let view_data ;
+
+	getWithJavaTags(function (data) {
+		java_data = data;
+		initWordcloud(java_data);
+	});
+
+	getUpvoteTags(function (data) {
+		upvotes_data = data;
+	});
+
+	getViewTags(function (data) {
+		view_data = data;
+	});
+	let wordcloudData = [];
+	function initWordcloud(data) {
+
+		for (const key in data) {
+			wordcloudData.push({
+				name: key,
+				value: data[key]
+			});
+		}
+		option = {
+			tooltip: {trigger: 'axis',
+				formatter: function (params, ticket, callback) {
+					var res = '';
+					for (var i = 0, l = params.length; i < l; i++) {
+						res += '' + params[i].seriesName + ' : ' + params[i].value + '<br>';
+					}
+					return res;
+				},
+				transitionDuration: 0,
+				backgroundColor: 'rgba(83,93,105,0.8)',
+				borderColor: '#535b69',
+				borderRadius: 8,
+				borderWidth: 2,
+				padding: [5, 10],
+				axisPointer: {
+					type: 'line',
+					lineStyle: {
+						type: 'dashed',
+						color: '#ffff00'
+					}
+				}},
+			series: [{
+				type: 'wordCloud',
+				shape: {
+					cloudGrow: 0.2
+				},
+				sizeRange: [10, 60],
+				rotationRange: [-30, 30],
+				gridSize: 2,
+				drawOutOfBound: false,
+				layoutAnimation: true,
+				keepAspect: true,
+				textStyle: {
+					fontWeight: 'bold',
+					color: function () {
+						return 'rgb(' + [
+							Math.round(Math.random() * 160),
+							Math.round(Math.random() * 160),
+							Math.round(Math.random() * 160)
+						].join(',') + ')';
+					}
+				},
+				emphasis: {
+					textStyle: {
+						shadowBlur: 15,
+						shadowColor: '#333'
+					}
+				},
+				data: wordcloudData.sort(function (a, b) {
+					return b.value - a.value;
+				})
+			}]
+		};
+		myChart3.setOption(option);
+	}
+	var resourceDataType = $('.data-label li.active').data('type');//用于切换基础库
+	function urlType() {
+		resourceDataType = $('.data-label li.active').data('type');
+		if (resourceDataType === 1) {
+			initWordcloud(java_data);
+		} else if (resourceDataType === 2) {
+			initWordcloud(upvotes_data);
+		} else if (resourceDataType === 3) {
+			initWordcloud( view_data);
+		}
+	}
+	var num =0 ;
+	//    资源类型定时器
+	function resourceType() {
+		$('.data-label li').eq(num).addClass('active').siblings().removeClass('active');
+		//$('.active-data-label').html($('.canvas-pic-two .data-label li.active').html());
+		urlType();
+		num++;
+		if (num >= 3) {
+			num = 0;
+		}
+	}
+
+	//    资源类型点击切换
+	$('.data-label').on('click', 'li', function () {
+		$(this).addClass('active').siblings().removeClass('active');
+		urlType();
+	});
+	var oTimer = setInterval(resourceType, 3000);
+	//    hover清除定时器
+	$('.data-label').hover(function () {
+		clearInterval(oTimer);
+	}, function () {
+		oTimer = setInterval(resourceType, 3000);
+	});
+
+</script>
+//answer分布
+<script>
+	var myChart5 = echarts.init(document.getElementById('main5'));
+	function getData(callback) {
+		$.ajax({
+			url: "/distribution-of-number-of-answers",
+			success: function (data) {
+				callback(data);
+			}
+		});
+	}
+	var Cnt = [];
+	var year = [];
+	getData(function (data){
+		year = Object.keys(data);
+		Cnt = year.map(function (key) {
+			return data[key];
+		});
+		// 处理完所有数据后执行图表更新操作
+		updateChart5();
+	});
+	function updateChart5(){
+		option = {
+			backgroundColor:"",
+			xAxis: {
+				axisTick: {
+					show: false
+				},
+				splitLine: {
+					show: false
+				},
+				splitArea: {
+					show: false
+				},
+				data: year,
+				axisLabel: {
+					formatter: function(value) {
+						var ret = ""; //拼接加\n返回的类目项
+						var maxLength = 1; //每项显示文字个数
+						var valLength = value.length; //X轴类目项的文字个数
+						var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数
+						if (rowN > 1) //如果类目项的文字大于3,
+						{
+							for (var i = 0; i < rowN; i++) {
+								var temp = ""; //每次截取的字符串
+								var start = i * maxLength; //开始截取的位置
+								var end = start + maxLength; //结束截取的位置
+								//这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧
+								temp = value.substring(start, end) + "\n";
+								ret += temp; //凭借最终的字符串
+							}
+							return ret;
+						} else {
+							return value;
+						}
+					},
+					interval: 0,
+					fontSize: 10,
+					fontWeight: 100,
+					textStyle: {
+						color: '#9faeb5',
+
+					}
+				},
+				axisLine: {
+					lineStyle: {
+						color: '#4d4d4d'
+					}
+				}
+			},
+			yAxis: {
+				axisTick: {
+					show: false
+				},
+				splitLine: {
+					show: false
+				},
+				splitArea: {
+					show: false
+				},
+
+				axisLabel: {
+					textStyle: {
+						color: '#9faeb5',
+						fontSize: 10,
+					}
+				},
+				axisLine: {
+					lineStyle: {
+						color: '#4d4d4d'
+					}
+				}
+			},
+			"tooltip": {
+				"trigger": "axis",
+				transitionDuration: 0,
+				backgroundColor: 'rgba(83,93,105,0.8)',
+				borderColor: '#535b69',
+				borderRadius: 8,
+				borderWidth: 2,
+				padding: [5, 10],
+				formatter: function (params, ticket, callback) {
+					var res = '';
+					for (var i = 0, l = params.length; i < l; i++) {
+						res += '' + params[i].seriesName + ' : ' + params[i].value + '<br>';
+					}
+					return res;
+				},
+				axisPointer: {
+					type: 'line',
+					lineStyle: {
+						type: 'dashed',
+						color: '#ffff00'
+					}
+				}
+			},
+			series: [{
+				name:'回答数',
+				type:"bar",
+				itemStyle: {
+					normal: {
+						color: {
+							type: 'linear',
+							x: 0,
+							y: 0,
+							x2: 0,
+							y2: 1,
+							colorStops: [{
+								offset: 0,
+								color: '#00d386' // 0% 处的颜色
+							}, {
+								offset: 1,
+								color: '#0076fc' // 100% 处的颜色
+							}],
+							globalCoord: false // 缺省为 false
+						},
+						barBorderRadius: 15,
+					}
+				},
+				label: {
+					normal: {
+						show: true,
+						position: "top",
+						textStyle: {
+							color: "#ffc72b",
+							fontSize: 10
+						}
+					}
+				},
+				data: Cnt,
+				barWidth: 16,
+			},{
+				name:'折线',
+				type:'line',
+				itemStyle : {  /*设置折线颜色*/
+					normal : {
+						/* color:'#c4cddc'*/
+					}
+				},
+				data:Cnt
+			}]
+		};
+		myChart5.setOption(option);
+	}
+</script>
+//用户参与讨论的分布
+<script>
+	
+</script>
 </body>
-<script src="./js/jquery-1.11.0.min.js"></script>
-<script src="./js/echarts.min.js"></script>
-<script src="./node_modules/echarts-liquidfill/dist/echarts-liquidfill.min.js"></script>
-<script src="./js/main.js"></script>
-
 </html>

@@ -11,6 +11,8 @@ public interface DataAnalyzerIntf {
   String getPercentageOfQuestionsWithoutAnswers();
   double getAverageNumberOfAnswers();
   int getMaximumNumberOfAnswers();
+  Map<Integer,Double> getAverageNumberDistributionOfAnswers();
+  Map<Integer,Integer> getMaximumNumberDistributionOfAnswers();
   Map<Integer, Integer> getDistributionOfNumberOfAnswers();
 
   // Accepted Answers

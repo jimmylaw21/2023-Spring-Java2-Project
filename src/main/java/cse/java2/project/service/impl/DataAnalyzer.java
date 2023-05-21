@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -46,11 +46,12 @@ public class DataAnalyzer implements DataAnalyzerIntf {
       }
     }
     double questionCount=allQuestions.size();
-    NumberFormat num=NumberFormat.getPercentInstance();
-    return num.format(questionWithoutAnswersCount/questionCount);
+    double other=questionCount-questionWithoutAnswersCount;
+    return questionWithoutAnswersCount+" "+other;
   }
 
   @Override
+  //平均每个问题（thread）有多少条回答
   public double getAverageNumberOfAnswers() {
     List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
     double answerTotalNumber=0;
@@ -73,14 +74,76 @@ public class DataAnalyzer implements DataAnalyzerIntf {
   }
 
   @Override
-  public Map<Integer, Integer> getDistributionOfNumberOfAnswers() {
-    List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
-    Map<Integer, Integer> answerCount = new HashMap<>();
-    for (Question question : allQuestions) {
-      int count=question.getAnswerCount();
-      answerCount.put(count, answerCount.getOrDefault(count, 0) + 1);
+  //平均每个问题（thread）有多少条回答
+  public Map<Integer, Double> getAverageNumberDistributionOfAnswers() {//按年份分布，年份由问题的创建时间确定
+    List<Question> questions = stackOverflowThreadMapper.getAllQuestions();
+    Map<Integer,List<Integer>> questionEveryYear=new HashMap<>();
+    for(Question question: questions){
+      long timestamp = question.getCreationDate();
+      // 将时间戳转换为LocalDateTime对象
+      LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.systemDefault());
+      // 获取年份
+      int year = dateTime.getYear();
+      questionEveryYear.computeIfAbsent(year, k -> new ArrayList<>());
+      questionEveryYear.get(year).add(question.getAnswerCount());
     }
-    return answerCount;
+    Map<Integer,Double> avgDistribution=new HashMap<>();
+    for (int year:questionEveryYear.keySet()){
+      double sum = questionEveryYear.get(year).stream()
+              .reduce(0, Integer::sum);
+      avgDistribution.put(year,sum/questionEveryYear.get(year).size());
+    }
+    avgDistribution= avgDistribution.entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByKey())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+    return avgDistribution;
+  }
+
+  @Override
+  public Map<Integer, Integer> getMaximumNumberDistributionOfAnswers() {//按年份分布
+    List<Question> questions=stackOverflowThreadMapper.getAllQuestions();
+    Map<Integer,List<Integer>> questionEveryYear=new HashMap<>();
+    for(Question question: questions){
+      long timestamp = question.getCreationDate();
+      // 将时间戳转换为LocalDateTime对象
+      LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.systemDefault());
+      // 获取年份
+      int year = dateTime.getYear();
+      questionEveryYear.computeIfAbsent(year, k -> new ArrayList<>());
+      questionEveryYear.get(year).add(question.getAnswerCount());
+    }
+    Map<Integer,Integer> maxDistribution = new HashMap<>();
+    for (int year:questionEveryYear.keySet()){
+      int max= Collections.max(questionEveryYear.get(year));
+      maxDistribution.put(year,max);
+    }
+    maxDistribution = maxDistribution.entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByKey())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+    return maxDistribution;
+  }
+
+  @Override
+  public Map<Integer, Integer> getDistributionOfNumberOfAnswers() {
+    Map<Integer, Integer> answerEveryYear = new HashMap<>();
+    List<Answer> answers=stackOverflowThreadMapper.getAllAnswers();
+    for(Answer answer:answers){
+      long time=answer.getCreationDate();
+      LocalDateTime dateTime=LocalDateTime.ofInstant(Instant.ofEpochSecond(time), ZoneId.systemDefault());
+      // 获取年份
+      int year = dateTime.getYear();
+      answerEveryYear.put(year,answerEveryYear.getOrDefault(year,0)+1);
+      answerEveryYear = answerEveryYear.entrySet()
+              .stream()
+              .sorted(Map.Entry.comparingByKey())
+              .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                      (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+    }
+    return answerEveryYear;
   }
 
   @Override
@@ -95,8 +158,8 @@ public class DataAnalyzer implements DataAnalyzerIntf {
         }
       }
     }
-    NumberFormat num=NumberFormat.getPercentInstance();
-    return num.format(acceptedAnswerCount/questionIds.size());
+    double other=questionIds.size()-acceptedAnswerCount;
+    return acceptedAnswerCount+" "+other;
 
   }
 

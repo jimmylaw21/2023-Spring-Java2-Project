@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+
 
 import java.util.List;
 import java.util.Map;
@@ -50,6 +50,16 @@ public class MainController {
     return dataAnalyzer.getMaximumNumberOfAnswers();
   }
 
+  @GetMapping("/average-number-distribution-of-answers")
+  public @ResponseBody Map<Integer, Double> getAverageNumberDistributionOfAnswers(){
+    return dataAnalyzer.getAverageNumberDistributionOfAnswers();
+  }
+
+  @GetMapping("/maximum-number-distribution-of-answers")
+  public @ResponseBody Map<Integer, Integer> getMaximumNumberDistributionOfAnswers(){
+    return dataAnalyzer.getMaximumNumberDistributionOfAnswers();
+  }
+
   @GetMapping("/distribution-of-number-of-answers")
   public @ResponseBody Map<Integer, Integer> getDistributionOfNumberOfAnswers() {
     return dataAnalyzer.getDistributionOfNumberOfAnswers();
@@ -57,7 +67,8 @@ public class MainController {
 
   @GetMapping("/percentage-of-questions-with-accepted-answers")
   public @ResponseBody String getPercentageOfQuestionsWithAcceptedAnswers() {
-    return dataAnalyzer.getPercentageOfQuestionsWithAcceptedAnswers();
+    String data=dataAnalyzer.getPercentageOfQuestionsWithAcceptedAnswers();
+    return data;
   }
 
   @GetMapping("/distribution-of-question-resolution-time")
@@ -73,7 +84,7 @@ public class MainController {
   @GetMapping("/frequent-tags")
   public @ResponseBody Map<String, Integer> getFrequentTagsWithJava() {
     Map<String, Integer> result = dataAnalyzer.getFrequentTagsWithJava();
-    System.out.println(result);
+    //System.out.println(result);
     return result;
   }
 

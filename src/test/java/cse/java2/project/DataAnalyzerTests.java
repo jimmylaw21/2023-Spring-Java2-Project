@@ -17,9 +17,10 @@ import cse.java2.project.mapper.StackOverflowThreadMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -74,7 +75,23 @@ public class DataAnalyzerTests {
         int result = dataAnalyzer.getMaximumNumberOfAnswers();
         System.out.println(result);
     }
-
+    @Test
+    public void testGetAverageNumberDistributionOfAnswers(){
+        List<Question> allQuestions = mapper.getAllQuestions();
+        for (Question question : allQuestions) {
+            long timestamp = question.getCreationDate();
+            // 将时间戳转换为LocalDateTime对象
+            LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.systemDefault());
+            // 获取年份
+            int year = dateTime.getYear();
+            System.out.println(timestamp+" 年份: " + year);
+        }
+        System.out.println(dataAnalyzer.getAverageNumberDistributionOfAnswers());
+    }
+    @Test
+    public void testGetMaximumNumberDistributionOfAnswers(){
+        System.out.println(dataAnalyzer.getMaximumNumberDistributionOfAnswers());
+    }
     @Test
     public void testGetDistributionOfAnswers() {
         Map<Integer, Integer> result = dataAnalyzer.getDistributionOfNumberOfAnswers();
