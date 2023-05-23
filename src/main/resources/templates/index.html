@@ -25,10 +25,13 @@
 <div class="container-content">
     <div class="top">
 		<div class="count-base" >
-			<div class="com-count-title">Number of questions answered</div>
+			<div class="com-count-title">已回答的问题数</div>
 			<div class="com-screen-content">
 				<div id="main1" style="width:100%;height:150px;"></div>
-				<div id="main1-1" style="width:100%;height:150px;"></div>
+				<div class="horizontal-container">
+					<div id="main1-1" style="width:50%;height:150px;"></div>
+					<div id="main1-2" style="width:50%;height:150px;"></div>
+				</div>
 			</div>
 			<span class="left-top"></span>
 			<span class="right-top"></span>
@@ -36,7 +39,7 @@
 			<span class="right-bottom"></span>
 		</div>
 		<div class="count-resource q1">
-			<div class="com-count-title">Number of answers</div>
+			<div class="com-count-title">回答数</div>
 			<div class="com-screen-content2">
 				<ul class="use-data">
 					<li>
@@ -113,9 +116,9 @@
 			<span class="right-bottom"></span>
 		</div>
 		<div class="count-share w2" >
-			<div class="com-count-title">含有 non-accepted answer 的 upvote 数高于 accepted answer 的问题</div>
+			<div class="com-count-title">在 Stack Overflow 上最频繁被讨论的Java APIs</div>
 			<div class="com-screen">
-				<div id="main1-2" style="width:100%;height:300px;"></div>
+				<div id="main1-3" style="width:100%;height:300px;"></div>
 			</div>
 			<span class="left-top"></span>
 			<span class="right-top"></span>
@@ -734,26 +737,30 @@
 </script>
 //问题提出到解决的时间间隔分布
 <script>
+
 	var myChart5 = echarts.init(document.getElementById('main5'));
-	var values;
 	function updateChart5(){
 		$.ajax({
 			url: "/distribution-of-question-resolution-time",
 			success: function (data) {
-				values = data;
+				var key = Object.keys(data);
+				var value = key.map(function (k) {
+					return data[k];
+				});
+				var values = [];
+				for (var j = 0; j < key.length; j++) {
+					let v=[];
+					v.push(key[j],value[j]);
+					values.push(v);
+				}
 				option = {
-					xAxis: {
-						scale: true
-					},
-					yAxis: {
-						scale: true
-					},
+					xAxis: {},
+					yAxis: {},
 					series: [
-
 						{
-							type: 'scatter',
-							// prettier-ignore
-							data: values
+							symbolSize: 20,
+							data: values,
+							type: 'scatter'
 						}
 					]
 				};
@@ -1065,6 +1072,86 @@
 		myChart7.setOption(option);
 	}
 </script>
-
+//apis词云
+<script>
+	var myChart1_3 = echarts.init(document.getElementById('main1-3'));
+	function getWithJavaAPIs(callback) {
+		$.ajax({
+			url: "/most-used-JavaApi",
+			success: function (data) {
+				callback(data);
+			}
+		});
+	}
+	getWithJavaAPIs(function (data){
+		initWordcloud1(data);
+	});
+	function initWordcloud1(data1) {
+		var key = Object.keys(data1);
+		var value = key.map(function (k) {
+			return data1[k];
+		});
+		var values = [];
+		for (var j = 0; j < key.length; j++) {
+			values.push({
+				'name':key[j],
+				'value':value[j]
+			})
+		}
+		option = {
+			tooltip: {trigger: 'axis',
+				formatter: function (params, ticket, callback) {
+					var res = '';
+					for (var i = 0, l = params.length; i < l; i++) {
+						res += '' + params[i].seriesName + ' : ' + params[i].value + '<br>';
+					}
+					return res;
+				},
+				transitionDuration: 0,
+				backgroundColor: 'rgba(83,93,105,0.8)',
+				borderColor: '#535b69',
+				borderRadius: 8,
+				borderWidth: 2,
+				padding: [5, 10],
+				axisPointer: {
+					type: 'line',
+					lineStyle: {
+						type: 'dashed',
+						color: '#ffff00'
+					}
+				}},
+			series: [{
+				type: 'wordCloud',
+				shape: {
+					cloudGrow: 0.2
+				},
+				sizeRange: [10, 60],
+				rotationRange: [-30, 30],
+				gridSize: 2,
+				drawOutOfBound: false,
+				layoutAnimation: true,
+				keepAspect: true,
+				textStyle: {
+					fontWeight: 'bold',
+					color: function () {
+						return 'rgb(' + [
+							Math.round(Math.random() * 160),
+							Math.round(Math.random() * 160),
+							Math.round(Math.random() * 160)
+						].join(',') + ')';
+					}
+				},
+				emphasis: {
+					textStyle: {
+						shadowBlur: 15,
+						shadowColor: '#333'
+					}
+				},
+				data: values
+			}]
+		};
+		myChart1_3.setOption(option);
+	}
+</script>
 </body>
 </html>

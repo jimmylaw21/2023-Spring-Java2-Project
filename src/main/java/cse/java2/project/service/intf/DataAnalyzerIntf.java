@@ -17,7 +17,7 @@ public interface DataAnalyzerIntf {
 
   // Accepted Answers
   String getPercentageOfQuestionsWithAcceptedAnswers();
-  Map<Long, Integer> getDistributionOfQuestionResolutionTime();
+  Map<Integer, Integer> getDistributionOfQuestionResolutionTime();
   String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvote();
 
   // Tags

@@ -205,8 +205,9 @@ public class DataAnalyzer implements DataAnalyzerIntf {
     return questionResolutionTime2;
   }
 
+
   @Override
-  public String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes() {
+  public String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvote() {
     List<Integer> questionIds = stackOverflowThreadMapper.getAllQuestionIds();
     double count=0;
     for (int questionId : questionIds) {

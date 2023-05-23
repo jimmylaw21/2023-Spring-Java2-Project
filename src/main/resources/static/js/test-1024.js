@@ -4,7 +4,7 @@
 //var myChart4 = echarts.init(document.getElementById('main4'));
 
 getNowFormatDate();
-init_myChart6();
+
 
 
 function init_myChart3(data) {

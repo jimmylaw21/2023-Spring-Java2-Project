@@ -106,7 +106,7 @@ public class DataAnalyzerTests {
 
     @Test
     public void testDistributionOfQuestionResolutionTime() {
-        Map<Long, Integer> result = dataAnalyzer.getDistributionOfQuestionResolutionTime();
+        Map<Integer, Integer> result = dataAnalyzer.getDistributionOfQuestionResolutionTime();
         System.out.println(result);
     }
 

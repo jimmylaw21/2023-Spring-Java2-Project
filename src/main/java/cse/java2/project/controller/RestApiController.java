@@ -46,7 +46,7 @@ public class RestApiController {
     }
 
     @GetMapping("/distribution-of-question-resolution-time")
-    public Map<Long, Integer> getDistributionOfQuestionResolutionTime() {
+    public Map<Integer, Integer> getDistributionOfQuestionResolutionTime() {
         return dataAnalyzer.getDistributionOfQuestionResolutionTime();
     }
 

@@ -287,8 +287,13 @@ a{text-decoration:none;}
     color:#1bb9f9;
     font-size: 12px;
 }
+.horizontal-container {
+    display: flex;
+}
 
-
+#main1-1, #main1-3 {
+    flex: 1;
+}
 
 
 

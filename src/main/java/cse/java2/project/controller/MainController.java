@@ -72,7 +72,7 @@ public class MainController {
   }
 
   @GetMapping("/distribution-of-question-resolution-time")
-  public @ResponseBody Map<Long, Integer> getDistributionOfQuestionResolutionTime() {
+  public @ResponseBody Map<Integer, Integer> getDistributionOfQuestionResolutionTime() {
     return dataAnalyzer.getDistributionOfQuestionResolutionTime();
   }
 
