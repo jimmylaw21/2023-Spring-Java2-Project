@@ -26,7 +26,6 @@
 		<div class="count-base" >
 			<div class="com-count-title">Number of questions answered</div>
 			<div class="com-screen-content">
-				
 				<div id="main1" style="width:100%;height:150px;"></div>
 				<div id="main1-1" style="width:100%;height:150px;"></div>
 			</div>
@@ -75,51 +74,34 @@
 			<span class="right-bottom"></span>
 		</div>
     </div>
-
 	<div class="mid">
 		<div class="count-share w1" >
-			<div class="com-count-title">数据共享次数</div>
+			<div class="com-count-title">活跃用户</div>
 			<div class="com-screen-content">
 				    <div class="topRec_List">
 						<dl>
-							<dd>资源名称</dd>
-							<dd>调用方</dd>
-							<dd>调用时间</dd>
+							<dd>参与 java thread 讨论最活跃的6个用户</dd>
 						</dl>
 						<div class="maquee">
 							<ul>
 								<li>
-									<div>审计局主要职责</div>
-									<div>审计局</div>
-									<div>08:20:26 </div>
+									<div id="dynamicText1"></div>
 								</li> 
 								<li>
-								
-									<div>残联主要职责</div>
-									<div>残联</div>
-									<div>08:20:36 </div>
+									<div id="dynamicText2"></div>
 								</li> 
 								<li>
-									
-									<div>委老干部局主要职责</div>
-									<div>老干部局</div>
-									<div>08:20:46 </div>
+									<div id="dynamicText3"></div>
 								</li> 
 								<li>		
-									<div>公安局主要职责</div>
-									<div>公安局</div>
-									<div>08:20:56</div>
+									<div id="dynamicText4"></div>
 								</li> 
 								<li>							
-									<div>更多精美大屏</div>
-									<div>关注公众号</div>
-									<div>DreamCoders</div>
+									<div id="dynamicText5"></div>
 								</li> 
-								<li>									
-									<div>交通运输局主要职责</div>
-									<div>完全免费分享</div>
-									<div>08:21:07</div>
-								</li> 
+								<li>
+									<div id="dynamicText6"></div>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -130,9 +112,19 @@
 			<span class="right-bottom"></span>
 		</div>
 		<div class="count-share w2" >
-			<div class="com-count-title">answers分布</div>
+			<div class="com-count-title">含有 non-accepted answer 的 upvote 数高于 accepted answer 的问题</div>
 			<div class="com-screen-content">
-			 <div id="main5" style="width:100%;height:300px;"></div>
+				<div id="main1-2" style="width:50%;height:150px;"></div>
+			</div>
+			<span class="left-top"></span>
+			<span class="right-top"></span>
+			<span class="left-bottom"></span>
+			<span class="right-bottom"></span>
+		</div>
+		<div class="count-share w3">
+			<div class="com-count-title">问题提出到解决的时间间隔</div>
+			<div class="com-screen-content">
+				<div id="main5" style="width:100%;height:300px;"></div>
 			</div>
 			<span class="left-top"></span>
 			<span class="right-top"></span>
@@ -143,7 +135,7 @@
 	
 	<div class="bottom">
 		<div class="count-topic e1" >
-			<div class="com-count-title">问题解决时间间隔分布</div>
+			<div class="com-count-title">用户参与java thread讨论的分布</div>
 			<div class="com-screen-content">
 			<div id="main6" style="width:100%;height:300px;"></div>
 			</div>
@@ -153,7 +145,7 @@
 			<span class="right-bottom"></span>
 		</div>
 		<div class="count-topic e2" >
-			<div class="com-count-title">用户参与java thread讨论的分布</div>
+			<div class="com-count-title">answers分布</div>
 			<div class="com-screen-content">
 			 <div id="main7" style="width:100%;height:300px;"></div>
 			</div>
@@ -184,10 +176,26 @@
 			})
 		}
 		$(function(){
+			updateDynamicText();
 			setInterval('autoScroll(".maquee")',2000);
 		})
+	  function updateDynamicText() {
+		  // 调用后端方法获取动态文本
+		  $.ajax({
+			  url: "/most-active-users", // 替换为实际的后端接口地址
+			  success: function (data) {
+				  // 将返回的字符串设置到相应的 <div> 元素中
+				  $('#dynamicText1').text("1."+data[0]);
+				  $('#dynamicText2').text("2."+data[1]);
+				  $('#dynamicText3').text("3."+data[2]);
+				  $('#dynamicText4').text("4."+data[3]);
+				  $('#dynamicText5').text("5."+data[4]);
+				  $('#dynamicText6').text("6."+data[5]);
+			  }
+		  });
+	  }
 </script>
-
+//三个饼状图
 <script>
 	var myChart1=echarts.init(document.getElementById('main1'));
 	function updateChart(){
@@ -242,7 +250,6 @@
 	updateChart();
 	setInterval(updateChart, 50000); // 每5秒更新一次图表
 </script>
-//两个饼状图
 <script>
 	var myChart1_1=echarts.init(document.getElementById('main1-1'));
 	function updateChart(){
@@ -296,6 +303,60 @@
 	// 初始加载图表并定时更新
 	updateChart();
 	setInterval(updateChart, 50000); // 每5秒更新一次图表
+</script>
+<script>
+	var myChart1_2=echarts.init(document.getElementById('main1-2'));
+	function updateChart1_2(){
+		$.ajax({
+			url:"/percentage-of-questions-with-non-accepted-answers-having-more-upvotes",
+			success:function (data) {
+				var values=data.split(" ");
+				option = {
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					color: [  '#f5e965', '#a74faf', '#ff9668'],
+					series: [
+						{
+							name: '',
+							type: 'pie',
+							radius: '45%',
+							center: ['50%', '50%'],
+							data: [
+								{value: parseInt(values[0]), name: '含有 non-accepted answer 的 upvote 数高于 accepted answer 的问题'},
+								{value: parseInt(values[1]), name: '其他'},
+							],
+							itemStyle: {
+								emphasis: {
+									shadowBlur: 10,
+									shadowOffsetX: 0,
+									shadowColor: 'rgba(0, 0, 0, 0.5)'
+								}
+							},
+							itemStyle: {
+								normal: {
+									label: {
+										show: true,
+										//	                            position:'inside',
+										formatter: '{b} : {c} ({d}%)',
+										fontSize: 12,    //文字的字体大小
+										color: 'inherit'
+									}
+								},
+								labelLine: {show: true}
+							}
+						}
+					]
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart1_2.setOption(option);
+			}
+		});
+	}
+	// 初始加载图表并定时更新
+	updateChart1_2();
+	setInterval(updateChart1_2, 50000); // 每5秒更新一次图表
 </script>
 //显示最大值和平均值
 <script>
@@ -672,9 +733,120 @@
 	});
 
 </script>
-//answer分布
+//问题提出到解决的时间间隔分布
 <script>
 	var myChart5 = echarts.init(document.getElementById('main5'));
+	var values;
+	function updateChart5(){
+		$.ajax({
+			url: "/distribution-of-question-resolution-time",
+			success: function (data) {
+				values = data;
+				option = {
+					xAxis: {
+						scale: true
+					},
+					yAxis: {
+						scale: true
+					},
+					series: [
+
+						{
+							type: 'scatter',
+							// prettier-ignore
+							data: values
+						}
+					]
+				};
+			myChart5.setOption(option);
+		}
+		});
+	}
+	updateChart5();
+	setInterval(updateChart5, 50000);
+</script>
+//用户参与讨论的分布
+<script>
+	var myChart6 = echarts.init(document.getElementById('main6'));
+	function getUserData(callback) {
+		$.ajax({
+			url: "/distribution-of-user-participation",
+			success: function (data) {
+				callback(data);
+			}
+		});
+	}
+	var userCnt1 = [];
+	var userCnt2 = [];
+	var userCnt3 = [];
+	getUserData(function (data){
+		for (var i = 0; i < data.length; i++) {
+			var userData = data[i].split(" ");
+			userCnt1.push(userData[0]);
+			userCnt2.push(userData[1]);
+			userCnt3.push(userData[2]);
+		}
+		// 处理完所有数据后执行图表更新操作
+		init_myChart6();
+	});
+	function init_myChart6(){
+		option = {
+			title: {
+				text: 'Stacked Line'
+			},
+			tooltip: {
+				trigger: 'axis'
+			},
+			legend: {
+				data: ['User总数','AnswerUser数','CommentUser数']
+			},
+			grid: {
+				left: '3%',
+				right: '4%',
+				bottom: '3%',
+				containLabel: true
+			},
+			toolbox: {
+				feature: {
+					saveAsImage: {}
+				}
+			},
+			xAxis: {
+				type: 'category',
+				boundaryGap: false,
+				data: []
+			},
+			yAxis: {
+				type: 'value'
+			},
+			series: [
+				{
+					name: 'Email',
+					type: 'line',
+					stack: 'Total',
+					data: userCnt1
+				},
+				{
+					name: 'Union Ads',
+					type: 'line',
+					stack: 'Total',
+					data: userCnt2
+				},
+				{
+					name: 'Video Ads',
+					type: 'line',
+					stack: 'Total',
+					data: userCnt3
+				}
+			]
+		};
+// 使用刚指定的配置项和数据显示图表。
+		myChart6.setOption(option);
+	}
+</script>
+//answer分布
+<script>
+	var myChart7 = echarts.init(document.getElementById('main7'));
 	function getData(callback) {
 		$.ajax({
 			url: "/distribution-of-number-of-answers",
@@ -691,80 +863,29 @@
 			return data[key];
 		});
 		// 处理完所有数据后执行图表更新操作
-		updateChart5();
+		updateChart7();
 	});
-	function updateChart5(){
+	function updateChart7(){
+		var colorList = [
+			'#ff2600',
+			'#ffc000',
+			'#00ad4e',
+			'#0073c2',
+			'#165868',
+			'#e76f00',
+			'#316194',
+			'#723761',
+			'#00b2f1',
+			'#4d6022',
+			'#4b83bf',
+			'#f9c813',
+			'#0176c0',
+			'#ff2600',
+			'#ffc000',
+			'#00ad4e'
+		];
 		option = {
-			backgroundColor:"",
-			xAxis: {
-				axisTick: {
-					show: false
-				},
-				splitLine: {
-					show: false
-				},
-				splitArea: {
-					show: false
-				},
-				data: year,
-				axisLabel: {
-					formatter: function(value) {
-						var ret = ""; //拼接加\n返回的类目项
-						var maxLength = 1; //每项显示文字个数
-						var valLength = value.length; //X轴类目项的文字个数
-						var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数
-						if (rowN > 1) //如果类目项的文字大于3,
-						{
-							for (var i = 0; i < rowN; i++) {
-								var temp = ""; //每次截取的字符串
-								var start = i * maxLength; //开始截取的位置
-								var end = start + maxLength; //结束截取的位置
-								//这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧
-								temp = value.substring(start, end) + "\n";
-								ret += temp; //凭借最终的字符串
-							}
-							return ret;
-						} else {
-							return value;
-						}
-					},
-					interval: 0,
-					fontSize: 10,
-					fontWeight: 100,
-					textStyle: {
-						color: '#9faeb5',
-
-					}
-				},
-				axisLine: {
-					lineStyle: {
-						color: '#4d4d4d'
-					}
-				}
-			},
-			yAxis: {
-				axisTick: {
-					show: false
-				},
-				splitLine: {
-					show: false
-				},
-				splitArea: {
-					show: false
-				},
-
-				axisLabel: {
-					textStyle: {
-						color: '#9faeb5',
-						fontSize: 10,
-					}
-				},
-				axisLine: {
-					lineStyle: {
-						color: '#4d4d4d'
-					}
-				}
-			},
+			color:colorList,
 			"tooltip": {
 				"trigger": "axis",
 				transitionDuration: 0,
@@ -788,58 +909,163 @@
 					}
 				}
 			},
-			series: [{
-				name:'回答数',
-				type:"bar",
-				itemStyle: {
-					normal: {
-						color: {
-							type: 'linear',
-							x: 0,
-							y: 0,
-							x2: 0,
-							y2: 1,
-							colorStops: [{
-								offset: 0,
-								color: '#00d386' // 0% 处的颜色
-							}, {
-								offset: 1,
-								color: '#0076fc' // 100% 处的颜色
-							}],
-							globalCoord: false // 缺省为 false
-						},
-						barBorderRadius: 15,
-					}
-				},
-				label: {
-					normal: {
-						show: true,
-						position: "top",
-						textStyle: {
-							color: "#ffc72b",
-							fontSize: 10
+			toolbox: {
+				show : true,
+				feature : {
+					mark : {
+						show: true
+					},
+
+				}
+			},
+			grid: {
+				"borderWidth": 0,
+				"top": '40',
+				"left": '30',
+				"right": '10',
+				"bottom": '40',
+				textStyle: {
+					color: "#fff"
+				}
+			},
+			xAxis : [
+				{
+					'type': 'category',
+					"axisTick": {
+						"show": false
+					},
+					"axisLine": {
+						"show": false,
+						lineStyle: {
+							color: '#868c96'
 						}
+					},
+					"axisLabel": {
+						"interval": 0,
+						fontSize:10,
+						formatter:function(value)
+						{
+							var ret = "";//拼接加\n返回的类目项
+							var maxLength = 2;//每项显示文字个数
+							var valLength = value.length;//X轴类目项的文字个数
+							var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数
+							if (rowN > 1)//如果类目项的文字大于3,
+							{
+								for (var i = 0; i < rowN; i++) {
+									var temp = "";//每次截取的字符串
+									var start = i * maxLength;//开始截取的位置
+									var end = start + maxLength;//结束截取的位置
+									//这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧
+									temp = value.substring(start, end) + "\n";
+									ret += temp; //凭借最终的字符串
+								}
+								return ret;
+							}
+							else {
+								return value;
+							}
+						}
+					},
+					"splitArea": {
+						"show": false
+					},
+					'data': year,
+					splitLine: {
+						show: false
+					},
+
+				}
+			],
+			yAxis : [
+				{
+					"type": "value",
+					offset: -14,
+					"splitLine": {
+						"show": false
+					},
+					"axisLine": {
+						"show": false,
+						lineStyle: {
+							color: '#868c96'
+						}
+					},
+					"axisTick": {
+						"show": false
+					},
+					"axisLabel": {
+						"interval": 0,
+						fontSize:10
+
+					},
+					"splitArea": {
+						"show": false
 					}
+				}
+
+			],
+			series : [
+				{
+					name:'回答数',
+					type:'bar',
+					data:Cnt,
+					itemStyle: {
+						normal: {
+							color: function(params) {
+								// build a color map as your need.
+								var colorList = [
+									'#ff2600',
+									'#ffc000',
+									'#00ad4e',
+									'#0073c2',
+									'#165868',
+									'#e76f00',
+									'#316194',
+									'#723761',
+									'#00b2f1',
+									'#4d6022',
+									'#4b83bf',
+									'#f9c813',
+									'#0176c0',
+									'#ff2600',
+									'#ffc000',
+									'#00ad4e'
+								];
+								return colorList[params.dataIndex]
+							},
+
+						}
+					},
+					barWidth: 14,
+					label: {
+						normal: {
+							show: true,
+							position: "top",
+							textStyle: {
+								color: "#ffc72b",
+								fontSize: 10
+							}
+						}
+					},
 				},
-				data: Cnt,
-				barWidth: 16,
-			},{
-				name:'折线',
-				type:'line',
-				itemStyle : {  /*设置折线颜色*/
-					normal : {
-						/* color:'#c4cddc'*/
-					}
-				},
-				data:Cnt
-			}]
+				{
+					name:'折线',
+					type:'line',
+					itemStyle : {  /*设置折线颜色*/
+						normal : {
+							color:'#d3d5fd'
+						}
+					},
+					data:Cnt
+				}
+
+			]
 		};
-		myChart5.setOption(option);
+
+
+// 使用刚指定的配置项和数据显示图表。
+		myChart7.setOption(option);
 	}
 </script>
-//用户参与讨论的分布
-<script>
-	
-</script>
+
 </body>
 </html>

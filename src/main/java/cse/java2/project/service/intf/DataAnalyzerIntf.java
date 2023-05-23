@@ -26,9 +26,7 @@ public interface DataAnalyzerIntf {
   Map<String, Integer> getMostViewedTagsOrTagCombinations();
 
   // Users
-  Map<Integer, Integer> getDistributionOfUserParticipation();
-  Map<Integer, Integer> getDistributionOfAnswerUserParticipation();
-  Map<Integer, Integer> getDistributionOfCommentUserParticipation();
+  List<String> getDistributionOfUserParticipation();
   List<String> getMostActiveUsers();
 }
 

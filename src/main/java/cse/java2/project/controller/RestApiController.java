@@ -71,7 +71,7 @@ public class RestApiController {
     }
 
     @GetMapping("/distribution-of-user-participation")
-    public Map<Integer, Integer> getDistributionOfUserParticipation() {
+    public List<String> getDistributionOfUserParticipation() {
         return dataAnalyzer.getDistributionOfUserParticipation();
     }
 

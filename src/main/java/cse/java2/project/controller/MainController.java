@@ -76,7 +76,7 @@ public class MainController {
     return dataAnalyzer.getDistributionOfQuestionResolutionTime();
   }
 
-  @GetMapping("/percentage-of-questions-with-non-accepted-answers-having-more-upvotes")
+  @GetMapping(" /percentage-of-questions-with-non-accepted-answers-having-more-upvotes")
   public @ResponseBody String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes() {
     return dataAnalyzer.getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes();
   }
@@ -99,10 +99,9 @@ public class MainController {
   }
 
   @GetMapping("/distribution-of-user-participation")
-  public @ResponseBody Map<Integer, Integer> getDistributionOfUserParticipation() {
+  public @ResponseBody List<String> getDistributionOfUserParticipation() {
     return dataAnalyzer.getDistributionOfUserParticipation();
   }
-
   @GetMapping("/most-active-users")
   public @ResponseBody List<String> getMostActiveUsers() {
     return dataAnalyzer.getMostActiveUsers();

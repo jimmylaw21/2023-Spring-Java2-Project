@@ -201,8 +201,7 @@ public class DataAnalyzer implements DataAnalyzerIntf {
         count++;
       }
     }
-    NumberFormat num=NumberFormat.getPercentInstance();
-    return num.format(count/questionIds.size());
+    return count+" "+(questionIds.size()-count);
   }
 
   @Override
@@ -241,66 +240,42 @@ public class DataAnalyzer implements DataAnalyzerIntf {
 
 
   @Override
-  public Map<Integer, Integer> getDistributionOfUserParticipation() {
+  public List<String> getDistributionOfUserParticipation() {
     List<Integer> questionIds = stackOverflowThreadMapper.getAllQuestionIds();
-    Map<Integer, Integer> threadParticipationCount = new HashMap<>();
+    List<String> threadParticipationCount = new ArrayList<>();
 
     for (Integer questionId : questionIds) {
       List<String> participants = stackOverflowThreadMapper.getParticipantsByQuestionId(questionId);
-      int count = participants.size();
-      threadParticipationCount.put(count, threadParticipationCount.getOrDefault(count, 0) + 1);
+      List<Answer> answers = stackOverflowThreadMapper.getAnswersByQuestionId(questionId);
+      List<Comment> comments=stackOverflowThreadMapper.getCommentsByQuestionId(questionId);
+      List<String> answersParticipants=new ArrayList<>() ;
+      for(Answer answer:answers){
+        answersParticipants.addAll(stackOverflowThreadMapper.getParticipantsByAnswerId(answer.getAnswerId()));
+      }
+      answersParticipants=new ArrayList<>(new HashSet<>(answersParticipants));
+      List<String> commentParticipants=new ArrayList<>() ;
+      for (Comment comment:comments){
+        commentParticipants.addAll(stackOverflowThreadMapper.getParticipantsByCommentId(comment.getCommentId()));
+      }
+      commentParticipants=new ArrayList<>(new HashSet<>(commentParticipants));
+      threadParticipationCount.add(participants.size()+" "+answersParticipants.size()+" "+commentParticipants.size());
     }
 
     return threadParticipationCount;
   }
 
-  @Override
-  public Map<Integer, Integer> getDistributionOfAnswerUserParticipation() {
-    List<Integer> questionIds = stackOverflowThreadMapper.getAllQuestionIds();
-    Map<Integer, Integer> answerParticipationCount = new HashMap<>();
-
-    for (Integer questionId : questionIds) {
-      List<Answer> answers = stackOverflowThreadMapper.getAnswersByQuestionId(questionId);
-      int count = 0;
-        for (Answer answer : answers) {
-            List<String> participants = stackOverflowThreadMapper.getParticipantsByAnswerId(answer.getAnswerId());
-            count += participants.size();
-        }
-      answerParticipationCount.put(count, answerParticipationCount.getOrDefault(count, 0) + 1);
-    }
-
-    return answerParticipationCount;
-  }
-
-  @Override
-  public Map<Integer, Integer> getDistributionOfCommentUserParticipation() {
-    List<Integer> questionIds = stackOverflowThreadMapper.getAllQuestionIds();
-    Map<Integer, Integer> commentParticipationCount = new HashMap<>();
-
-    for (Integer questionId : questionIds) {
-      List<Comment> comments = stackOverflowThreadMapper.getCommentsByQuestionId(questionId);
-      int count = 0;
-      for (Comment comment : comments) {
-        List<String> participants = stackOverflowThreadMapper.getParticipantsByCommentId(comment.getCommentId());
-        count += participants.size();
-      }
-      commentParticipationCount.put(count, commentParticipationCount.getOrDefault(count, 0) + 1);
-    }
-
-    return commentParticipationCount;
-  }
-
-
-
 
   @Override
   public List<String> getMostActiveUsers() {
-    int limit = 10; // 设定返回的最活跃用户数量，可以根据需要调整
+    int limit = 6; // 设定返回的最活跃用户数量，可以根据需要调整
     List<Map<String, Object>> mostActiveUsersData = stackOverflowThreadMapper.getMostActiveUsersWithLimit(limit);
     List<String> mostActiveUsers = new ArrayList<>();
 
     for (Map<String, Object> userData : mostActiveUsersData) {
-      mostActiveUsers.add(stackOverflowThreadMapper.getDisplayNameByOwnerId((String) userData.get("owner_id")));
+      String s=stackOverflowThreadMapper.getDisplayNameByOwnerId((String) userData.get("owner_id"));
+      if(s!=null) {
+        mostActiveUsers.add(s);
+      }
     }
     return mostActiveUsers;
   }
