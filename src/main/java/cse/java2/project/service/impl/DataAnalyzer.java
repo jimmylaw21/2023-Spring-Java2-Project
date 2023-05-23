@@ -9,6 +9,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,10 @@ public class DataAnalyzer implements DataAnalyzerIntf {
 
   String resource = "mybatis-config.xml";
   InputStream inputStream = Resources.getResourceAsStream(resource);
+
   SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-  SqlSession sqlSession = sqlSessionFactory.openSession();
-  StackOverflowThreadMapper stackOverflowThreadMapper = sqlSession.getMapper(StackOverflowThreadMapper.class);
+  SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory);
+  StackOverflowThreadMapper stackOverflowThreadMapper = sqlSessionTemplate.getMapper(StackOverflowThreadMapper.class);
 
   @Autowired
   public DataAnalyzer(StackOverflowThreadMapper stackOverflowThreadMapper) throws IOException {
@@ -165,7 +167,7 @@ public class DataAnalyzer implements DataAnalyzerIntf {
   }
 
   @Override
-  public Map<Long, Integer> getDistributionOfQuestionResolutionTime() {
+  public Map<Integer, Integer> getDistributionOfQuestionResolutionTime() {
     List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
     Map<Long, Integer> questionResolutionTime = new HashMap<>();
     for (Question question : allQuestions) {
@@ -179,11 +181,32 @@ public class DataAnalyzer implements DataAnalyzerIntf {
         }
       }
     }
-    return questionResolutionTime;
+    //划分为10个区间
+    Map<Integer, Integer> questionResolutionTime2 = new HashMap<>();
+    for (long time : questionResolutionTime.keySet()) {
+      boolean flag = false;
+      for (int i = 1; i < 50; i++) {
+        if (time < i * 200){
+            questionResolutionTime2.put(i * 200, questionResolutionTime2.getOrDefault(i * 200, 0) + questionResolutionTime.get(time));
+            flag = true;
+            break;
+        }
+      }
+        if (!flag) {
+            questionResolutionTime2.put(10000, questionResolutionTime2.getOrDefault(10000, 0) + questionResolutionTime.get(time));
+        }
+    }
+    //将map按照key排序
+    questionResolutionTime2 = questionResolutionTime2.entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByKey())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+    return questionResolutionTime2;
   }
 
   @Override
-  public String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvote() {
+  public String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes() {
     List<Integer> questionIds = stackOverflowThreadMapper.getAllQuestionIds();
     double count=0;
     for (int questionId : questionIds) {
@@ -209,10 +232,10 @@ public class DataAnalyzer implements DataAnalyzerIntf {
     List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
 
     return allQuestions.stream()
-        .filter(q -> q.getTags().contains("java"))
-        .flatMap(q -> q.getTags().stream())
-        .filter(tag -> !tag.equals("java"))
-        .collect(Collectors.groupingBy(Function.identity(), Collectors.summingInt(e -> 1)));
+            .filter(q -> q.getTags().contains("java"))
+            .flatMap(q -> q.getTags().stream())
+            .filter(tag -> !tag.equals("java"))
+            .collect(Collectors.groupingBy(Function.identity(), Collectors.summingInt(e -> 1)));
   }
 
   @Override
@@ -220,10 +243,10 @@ public class DataAnalyzer implements DataAnalyzerIntf {
     List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
 
     return allQuestions.stream()
-        .collect(Collectors.toMap(
-            q -> String.join(",", q.getTags()),
-            Question::getUpVoteCount,
-            Integer::sum));
+            .collect(Collectors.toMap(
+                    q -> String.join(",", q.getTags()),
+                    Question::getUpVoteCount,
+                    Integer::sum));
   }
 
 
@@ -232,10 +255,10 @@ public class DataAnalyzer implements DataAnalyzerIntf {
     List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
 
     return allQuestions.stream()
-        .collect(Collectors.toMap(
-            q -> String.join(",", q.getTags()),
-            Question::getViewCount,
-            Integer::sum));
+            .collect(Collectors.toMap(
+                    q -> String.join(",", q.getTags()),
+                    Question::getViewCount,
+                    Integer::sum));
   }
 
 
