@@ -754,10 +754,32 @@
 					values.push(v);
 				}
 				option = {
+					tooltip: {trigger: 'axis',
+						formatter: function (params, ticket, callback) {
+							var res = '';
+							for (var i = 0, l = params.length; i < l; i++) {
+								res += ''  + params[i].value + '<br>';
+							}
+							return res;
+						},
+						transitionDuration: 0,
+						backgroundColor: 'rgba(83,93,105,0.8)',
+						borderColor: '#535b69',
+						borderRadius: 8,
+						borderWidth: 2,
+						padding: [5, 10],
+						axisPointer: {
+							type: 'line',
+							lineStyle: {
+								type: 'dashed',
+								color: '#ffff00'
+							}
+						}},
 					xAxis: {},
 					yAxis: {},
 					series: [
 						{
+							name: '解决时间',
 							symbolSize: 20,
 							data: values,
 							type: 'scatter'
@@ -797,14 +819,26 @@
 	});
 	function init_myChart6(){
 		option = {
+			color: ['#80FFA5', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
 			title: {
-				text: 'Stacked Line'
+				text: ''
 			},
 			tooltip: {
-				trigger: 'axis'
+				trigger: 'axis',
+				axisPointer: {
+					type: 'cross',
+					label: {
+						backgroundColor: '#6a7985'
+					}
+				}
 			},
 			legend: {
-				data: ['User总数','AnswerUser数','CommentUser数']
+				data: ['总用户数', '回答者', '评论者']
+			},
+			toolbox: {
+				feature: {
+					saveAsImage: {}
+				}
 			},
 			grid: {
 				left: '3%',
@@ -812,36 +846,97 @@
 				bottom: '3%',
 				containLabel: true
 			},
-			toolbox: {
-				feature: {
-					saveAsImage: {}
+			xAxis: [
+				{
+					type: 'category',
+					boundaryGap: false,
 				}
-			},
-			xAxis: {
-				type: 'category',
-				boundaryGap: false,
-				data: []
-			},
-			yAxis: {
-				type: 'value'
-			},
+			],
+			yAxis: [
+				{
+					type: 'value'
+				}
+			],
 			series: [
 				{
-					name: 'Email',
+					name: '总用户数',
 					type: 'line',
 					stack: 'Total',
+					smooth: true,
+					lineStyle: {
+						width: 0
+					},
+					showSymbol: false,
+					areaStyle: {
+						opacity: 0.8,
+						color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+							{
+								offset: 0,
+								color: 'rgb(128, 255, 165)'
+							},
+							{
+								offset: 1,
+								color: 'rgb(1, 191, 236)'
+							}
+						])
+					},
+					emphasis: {
+						focus: 'series'
+					},
 					data: userCnt1
 				},
 				{
-					name: 'Union Ads',
+					name: '回答者',
 					type: 'line',
 					stack: 'Total',
+					smooth: true,
+					lineStyle: {
+						width: 0
+					},
+					showSymbol: false,
+					areaStyle: {
+						opacity: 0.8,
+						color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+							{
+								offset: 0,
+								color: 'rgb(0, 221, 255)'
+							},
+							{
+								offset: 1,
+								color: 'rgb(77, 119, 255)'
+							}
+						])
+					},
+					emphasis: {
+						focus: 'series'
+					},
 					data: userCnt2
 				},
 				{
-					name: 'Video Ads',
+					name: '评论者',
 					type: 'line',
 					stack: 'Total',
+					smooth: true,
+					lineStyle: {
+						width: 0
+					},
+					showSymbol: false,
+					areaStyle: {
+						opacity: 0.8,
+						color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+							{
+								offset: 0,
+								color: 'rgb(55, 162, 255)'
+							},
+							{
+								offset: 1,
+								color: 'rgb(116, 21, 219)'
+							}
+						])
+					},
+					emphasis: {
+						focus: 'series'
+					},
 					data: userCnt3
 				}
 			]
