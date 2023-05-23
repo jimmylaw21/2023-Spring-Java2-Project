@@ -2,11 +2,13 @@ package cse.java2.project.mapper;
 
 import cse.java2.project.domain.model.dto.*;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.List;
 
 @Mapper
+@Component
 //Mapper接口中定义了对StackOverflowThread对象的增删改查操作，Mapper XML文件中实现了对应的SQL语句。
 public interface StackOverflowThreadMapper {
     void insertQuestion(Question question);

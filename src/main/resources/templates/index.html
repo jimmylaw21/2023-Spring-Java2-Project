@@ -113,8 +113,8 @@
 		</div>
 		<div class="count-share w2" >
 			<div class="com-count-title">含有 non-accepted answer 的 upvote 数高于 accepted answer 的问题</div>
-			<div class="com-screen-content">
-				<div id="main1-2" style="width:50%;height:150px;"></div>
+			<div class="com-screen">
+				<div id="main1-2" style="width:100%;height:300px;"></div>
 			</div>
 			<span class="left-top"></span>
 			<span class="right-top"></span>
@@ -308,7 +308,7 @@
 	var myChart1_2=echarts.init(document.getElementById('main1-2'));
 	function updateChart1_2(){
 		$.ajax({
-			url:"/percentage-of-questions-with-non-accepted-answers-having-more-upvotes",
+			url:"/percentage-of-questions-with-non-accepted-answers-having-more-upvote",
 			success:function (data) {
 				var values=data.split(" ");
 				option = {
@@ -356,7 +356,7 @@
 	}
 	// 初始加载图表并定时更新
 	updateChart1_2();
-	setInterval(updateChart1_2, 50000); // 每5秒更新一次图表
+	setInterval(updateChart1_2, 5000); // 每5秒更新一次图表
 </script>
 //显示最大值和平均值
 <script>
@@ -619,9 +619,8 @@
 	let upvotes_data ;
 	let view_data ;
 
-	getWithJavaTags(function (data) {
-		java_data = data;
-		initWordcloud(java_data);
+	getWithJavaTags(function (data1) {
+		java_data = data1;
 	});
 
 	getUpvoteTags(function (data) {
@@ -631,13 +630,13 @@
 	getViewTags(function (data) {
 		view_data = data;
 	});
-	let wordcloudData = [];
+	let wordcloudData =[];
 	function initWordcloud(data) {
 
-		for (const key in data) {
+		for (let [key,value] of data.entries()) {
 			wordcloudData.push({
 				name: key,
-				value: data[key]
+				value: value
 			});
 		}
 		option = {

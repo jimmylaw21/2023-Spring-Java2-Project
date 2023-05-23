@@ -183,7 +183,7 @@ public class DataAnalyzer implements DataAnalyzerIntf {
   }
 
   @Override
-  public String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes() {
+  public String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvote() {
     List<Integer> questionIds = stackOverflowThreadMapper.getAllQuestionIds();
     double count=0;
     for (int questionId : questionIds) {
@@ -267,7 +267,7 @@ public class DataAnalyzer implements DataAnalyzerIntf {
 
   @Override
   public List<String> getMostActiveUsers() {
-    int limit = 6; // 设定返回的最活跃用户数量，可以根据需要调整
+    int limit = 7; // 设定返回的最活跃用户数量，可以根据需要调整
     List<Map<String, Object>> mostActiveUsersData = stackOverflowThreadMapper.getMostActiveUsersWithLimit(limit);
     List<String> mostActiveUsers = new ArrayList<>();
 

@@ -111,8 +111,8 @@ public class DataAnalyzerTests {
     }
 
     @Test
-    public void testPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes() {
-        String result = dataAnalyzer.getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes();
+    public void testPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvote() {
+        String result = dataAnalyzer.getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvote();
         System.out.println(result);
     }
 

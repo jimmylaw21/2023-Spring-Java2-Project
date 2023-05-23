@@ -76,9 +76,9 @@ public class MainController {
     return dataAnalyzer.getDistributionOfQuestionResolutionTime();
   }
 
-  @GetMapping(" /percentage-of-questions-with-non-accepted-answers-having-more-upvotes")
-  public @ResponseBody String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes() {
-    return dataAnalyzer.getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes();
+  @GetMapping("/percentage-of-questions-with-non-accepted-answers-having-more-upvote")
+  public @ResponseBody String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvote() {
+    return dataAnalyzer.getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvote();
   }
 
   @GetMapping("/frequent-tags")
