@@ -78,7 +78,7 @@ public class MainController {
 
   @GetMapping("/percentage-of-questions-with-non-accepted-answers-having-more-upvote")
   public @ResponseBody String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvote() {
-    return dataAnalyzer.getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvote();
+    return dataAnalyzer.getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes();
   }
 
   @GetMapping("/frequent-tags")

@@ -1,6 +1,6 @@
 # 2023-Spring-Java2-Project Repo
 
-1. **引言**
+1. ### **引言**
 
    - **项目的目的和目标**
 
@@ -10,7 +10,7 @@
 
      本项目的数据主要来源于Stack Overflow，这是一个全球知名的技术问答网站，有着庞大的用户群和丰富的内容。特别是在Java编程领域，Stack Overflow上的问题和讨论无疑构成了一个宝贵的知识库。因此，分析这些数据不仅能够帮助我们了解Java编程的主要议题，也能够反映出Java社区的活跃度和发展趋势。此外，由于Stack Overflow的数据是开放的，这也使得我们可以相对容易地获取和处理这些数据，进行各种有意义的分析。
 
-2. **数据收集和储存**
+2. ### **数据收集和储存**
 
    - **数据的来源**
 
@@ -52,7 +52,72 @@
 
      ![image-20230519112714729](C:\Users\jimmylaw21\AppData\Roaming\Typora\typora-user-images\image-20230519112714729.png)
 
-3. **项目架构设计**
+   建库语句：
+
+   ```sql
+   CREATE TABLE owner (
+     user_id TEXT primary key ,
+     display_name VARCHAR(255)  ,
+     reputation VARCHAR,
+     user_type VARCHAR(255),
+     accept_rate INTEGER,
+     profile_image VARCHAR(255),
+     link VARCHAR(255)
+   );
+   CREATE TABLE question (
+     question_id INTEGER PRIMARY KEY,
+     title TEXT,
+     body TEXT ,
+     tags TEXT[],
+     owner_id TEXT,
+     owner_reputation INTEGER,
+     is_answered BOOLEAN,
+     view_count INTEGER,
+     favorite_count INTEGER,
+     down_vote_count INTEGER,
+     up_vote_count INTEGER,
+     answer_count INTEGER,
+     score INTEGER,
+     last_activity_date TIMESTAMP,
+     creation_date TIMESTAMP,
+     last_edit_date TIMESTAMP,
+     link TEXT,
+     FOREIGN KEY (owner_id) REFERENCES owner(user_id)
+   );
+   CREATE TABLE comment (
+   comment_id INTEGER PRIMARY KEY,
+   question_id INTEGER,
+   post_id INTEGER,
+   owner_id TEXT,
+   edited BOOLEAN,
+   creation_date BIGINT,
+   link TEXT,
+   body TEXT,
+   FOREIGN KEY (owner_id) REFERENCES owner(user_id),
+   FOREIGN KEY (question_id) REFERENCES question(question_id)
+   );
+   CREATE TABLE answer (
+   answer_id INTEGER PRIMARY KEY,
+   question_id INTEGER,
+   owner_id TEXT,
+   down_vote_count INTEGER,
+   up_vote_count INTEGER,
+   is_accepted BOOLEAN,
+   score INTEGER,
+   last_activity_date BIGINT,
+   last_edit_date BIGINT,
+   creation_date BIGINT,
+   link TEXT,
+   title TEXT,
+   body TEXT,
+   FOREIGN KEY (owner_id) REFERENCES owner(user_id),
+   FOREIGN KEY (question_id) REFERENCES question(question_id)
+   );
+   ```
+
+   
+
+3. ### **项目架构设计**
 
    ![image-20230519120914240](C:\Users\jimmylaw21\AppData\Roaming\Typora\typora-user-images\image-20230519120914240.png)
 
@@ -84,20 +149,36 @@
 
      在数据流方面，当我们的Controller接收到用户请求后，首先从数据库中获取数据，然后将这些数据封装为Model对象。这一步是通过调用我们之前创建的MyBatis Mapper接口来实现的。获取到数据后，Controller再将这些Model对象传递给View进行渲染。在这个项目中，由于我们主要关注后端处理，所以View主要是将Model对象转换为JSON，然后返回给前端。这样，数据就从数据库流向了前端，实现了整个数据流的过程。
 
-4. **关键类，字段和方法**
+4. ### **关键类，字段和方法**
 
    - **关键类的介绍和设计理由**
      - `Question`、`Answer`、`Comment`和`Owner`：这四个类分别代表Stack Overflow的问题、回答、评论和用户。它们是模型（Model）的主要组成部分，用于存储和处理与Stack Overflow相关的数据。这些类的设计使得我们能够以面向对象的方式处理数据，提高了代码的可读性和可维护性。
      - `StackOverflowThreadMapper`：这是一个接口，定义了对数据库的操作方法。它是控制器（Controller）的主要组成部分，用于从数据库中获取数据，并调用相应的模型和视图进行处理。通过使用这个接口，我们可以将数据库操作与业务逻辑分离，使得代码更加清晰。
      - `JavaApiIdentifier`：这个类是Java API分析的核心，负责从Stack Overflow的问题、答案和评论中抽取Java代码片段，并通过JavaParser解析代码，获取使用的Java类和方法。设计这个类的原因是我们希望能够统计和分析Java API在Stack Overflow中的使用情况，以提供给用户最常用的API信息。
-     - `DataAnalyzer`：这个类是应用中的关键服务类，它通过实现`DataAnalyzerIntf`接口来提供各种数据分析功能。这个类主要用于从数据库中获取Stack Overflow相关的数据，并对这些数据进行处理和分析。以下是类中关键部分的介绍：
+     - `DataAnalyzer`：这个类是应用中的关键服务类，它通过实现`DataAnalyzerIntf`接口来提供各种数据分析功能。这个类主要用于从数据库中获取Stack Overflow相关的数据，并对这些数据进行处理和分析。
+   - **关键字段和方法的介绍**
      
+     - 在`Question`、`Answer`、`Comment`和`Owner`类中，每个字段都对应Stack Overflow的一个属性，例如问题的标题、回答的内容、评论的创建时间和用户的声誉等。这些字段使得我们能够方便地处理和分析Stack Overflow的数据。
+     - 在`StackOverflowThreadMapper`接口中，定义了一系列的方法用于操作数据库，例如`insertQuestion(Question question)`、`getAnswersByQuestionId(int questionId)`等。这些方法使得我们能够方便地从数据库中获取数据，或者将数据保存到数据库中。
+     - 在`JavaApiIdentifier`类中，我们定义了如下几个关键方法：
+       
+       - `extractCodeSnippets(String text)`：这个方法负责从输入的文本中抽取Java代码片段，它使用正则表达式来识别代码块和内联代码。这个方法的目标是获取尽可能多的Java代码，以便我们可以从中提取API使用情况。
+       - `extractClassAndMethodNames(String codeSnippet)`：这个方法负责从Java代码片段中抽取类名和方法名，它使用JavaParser来解析代码，并从中获取类声明和方法声明。这个方法的目标是提取代码中使用的Java API，以便我们可以统计和分析这些API的使用情况。
+       - `getMostUsedJavaApi()`：这个方法负责统计和返回最常用的Java API，它首先从所有的问题、答案和评论中抽取代码片段，然后提取出类名和方法名，最后统计每个API的使用次数，并按次数进行排序。这个方法的目标是提供一个概览，让我们知道哪些API在Stack Overflow中被最频繁地使用。
+     - MyBatis相关的类的关键字段和方法包括：
+     
+       - `SqlSession`：这是一个单线程对象，表示和数据库的一次会话，用完必须关闭它。最佳的Scope是请求或者方法范围。SqlSession包含了执行SQL命令所需的所有方法，如`selectOne(String statement, Object parameter)`,`insert(String statement, Object parameter)`等等。
+       - `SqlSessionFactory`：创建SqlSession的工厂，保证SqlSession的生命周期管理。一旦创建了SqlSessionFactory，应该在应用的运行期间一直存在，没有任何理由丢弃它或重新创建另一个实例。使用SqlSessionFactory的最佳实践是在应用运行期间不要重复创建多次，多次重建SqlSessionFactory被视为一种代码“坏味”。一旦创建了 SqlSessionFactory，那么就应该将其存储在一个合适的地方，如使用单例模式或者将其作为静态字段。SqlSessionFactory是线程安全的，可以被多个共享，那么最佳的作用范围是应用作用范围。
+       - `Mapper`：MyBatis 的真正强大之处在于其映射声明。而Mapper类就是这种映射声明的载体，其方法对应着SQL映射文件中的一个SQL语句，提供了面向对象的视图和数据库模式之间的数据映射。通过编写Mapper接口以及配套的XML文件，我们可以极大地简化SQL的操作。
+       
+     - DataAnalyzer的关键字段和方法包括：
+       
        **关键字段**：
-     
+       
        - `stackOverflowThreadMapper`：这是一个`StackOverflowThreadMapper`对象，它是MyBatis的Mapper接口，用于与数据库进行交互。
-     
+       
        **关键方法**：
-     
+       
        - `getPercentageOfQuestionsWithoutAnswers`：此方法返回没有回答的问题所占的百分比。它先获取所有的问题，然后计算其中没有回答的问题的数量，最后将这个数量除以总问题数量得到百分比。
        - `getAverageNumberOfAnswers`：此方法返回每个问题的平均回答数。它先获取所有的问题，然后计算所有问题的回答数总和，最后将总和除以问题数量得到平均值。
        - `getMaximumNumberOfAnswers`：此方法返回问题的最大回答数。它先获取所有的问题，然后遍历这些问题，找出具有最多回答的问题的回答数量。
@@ -110,37 +191,26 @@
        - `getMostViewedTagsOrTagCombinations`：此方法返回最多被查看（查看次数最多）的标签或标签组合及其总查看次数。
        - `getDistributionOfUserParticipation`：此方法返回用户参与度（用户在问题中的参与情况）的分布。
        - `getMostActiveUsers`：这个方法返回最活跃的用户。在这里，"最活跃的"是指参与了最多Stack Overflow线程的用户。该方法首先从`stackOverflowThreadMapper`获取一个包含最活跃用户数据的列表，然后通过遍历这个列表并从每个用户数据中提取出`owner_id`字段，使用这个字段从Mapper获取对应的用户名并添加到结果列表中。此方法最终返回一个包含最活跃用户名的列表。
-   - **关键字段和方法的介绍**
-     - 在`Question`、`Answer`、`Comment`和`Owner`类中，每个字段都对应Stack Overflow的一个属性，例如问题的标题、回答的内容、评论的创建时间和用户的声誉等。这些字段使得我们能够方便地处理和分析Stack Overflow的数据。
-     - 在`StackOverflowThreadMapper`接口中，定义了一系列的方法用于操作数据库，例如`insertQuestion(Question question)`、`getAnswersByQuestionId(int questionId)`等。这些方法使得我们能够方便地从数据库中获取数据，或者将数据保存到数据库中。
-     - 在`JavaApiIdentifier`类中，我们定义了如下几个关键方法：
-       
-       - `extractCodeSnippets(String text)`：这个方法负责从输入的文本中抽取Java代码片段，它使用正则表达式来识别代码块和内联代码。这个方法的目标是获取尽可能多的Java代码，以便我们可以从中提取API使用情况。
-       - `extractClassAndMethodNames(String codeSnippet)`：这个方法负责从Java代码片段中抽取类名和方法名，它使用JavaParser来解析代码，并从中获取类声明和方法声明。这个方法的目标是提取代码中使用的Java API，以便我们可以统计和分析这些API的使用情况。
-       - `getMostUsedJavaApi()`：这个方法负责统计和返回最常用的Java API，它首先从所有的问题、答案和评论中抽取代码片段，然后提取出类名和方法名，最后统计每个API的使用次数，并按次数进行排序。这个方法的目标是提供一个概览，让我们知道哪些API在Stack Overflow中被最频繁地使用。
-     - MyBatis中的关键字段和方法包括：
-     
-       - `SqlSession`：这是一个单线程对象，表示和数据库的一次会话，用完必须关闭它。最佳的Scope是请求或者方法范围。SqlSession包含了执行SQL命令所需的所有方法，如`selectOne(String statement, Object parameter)`,`insert(String statement, Object parameter)`等等。
-       - `SqlSessionFactory`：创建SqlSession的工厂，保证SqlSession的生命周期管理。一旦创建了SqlSessionFactory，应该在应用的运行期间一直存在，没有任何理由丢弃它或重新创建另一个实例。使用SqlSessionFactory的最佳实践是在应用运行期间不要重复创建多次，多次重建SqlSessionFactory被视为一种代码“坏味”。一旦创建了 SqlSessionFactory，那么就应该将其存储在一个合适的地方，如使用单例模式或者将其作为静态字段。SqlSessionFactory是线程安全的，可以被多个共享，那么最佳的作用范围是应用作用范围。
-       - `Mapper`：MyBatis 的真正强大之处在于其映射声明。而Mapper类就是这种映射声明的载体，其方法对应着SQL映射文件中的一个SQL语句，提供了面向对象的视图和数据库模式之间的数据映射。通过编写Mapper接口以及配套的XML文件，我们可以极大地简化SQL的操作。
 
-5. **数据分析结果**
+5. ### **数据分析结果**
 
-   - 描述你从数据分析中获取的见解
+   - 描述从数据分析中获取的见解
 
-   在对Stack Overflow数据集进行深入研究和分析后，我们得到了一些有趣和洞察性的发现。以下是我们从数据中获取的一些主要见解：
+     在对Stack Overflow数据集进行深入研究和分析后，我们得到了一些有趣和洞察性的发现。以下是我们从数据中获取的一些主要见解：
 
    - **问题的回答情况**
 
      根据我们的数据分析，有一定比例的问题没有得到任何回答。这可能反映出用户在选择回答问题时的偏好，或者表明某些领域或问题类型更可能获得回答。同时，我们还发现问题的平均回答数为**21.624**，最大回答数为**90**。下面是关于回答数量分布的图表，这有助于我们更好地理解Stack Overflow用户的活跃度和社区的互动性。
 
-     [此处插入回答数量分布图]
+     ![image-20230523174614268](C:\Users\jimmylaw21\AppData\Roaming\Typora\typora-user-images\image-20230523174614268.png)
 
    - **回答的接受情况**
 
      我们分析了问题拥有接受答案的情况，其比例为**89%**。此外，我们还研究了哪些问题的非接受回答（即未被标记为接受的回答）获得的赞同票数超过了被接受的回答，其比例为**11%**，这可能反映出一些有趣的社区动态。我们还分析了问题的解决时间，即问题发布时间与接受回答发布时间之间的持续时间，以下是分布图。这有助于我们理解问题的复杂性和社区用户的响应速度。
 
-     [此处插入分布图]
+     ![image-20230523222505898](C:\Users\jimmylaw21\AppData\Roaming\Typora\typora-user-images\image-20230523222505898.png)
+
+     下降的散点排布可以看出大多数问题在发布后很快接受答案，较少问题在发布后经历长期讨论后才接受答案。
 
    - **问题标签的分析**
 
@@ -148,11 +218,17 @@
 
      此外，我们还研究了哪些标签或标签组合收到了最多的赞同票和浏览量。
 
+     ![image-20230523203218886](C:\Users\jimmylaw21\AppData\Roaming\Typora\typora-user-images\image-20230523203218886.png)
+
      **{java,exception,junit,junit4,assert}，{java,string,security,passwords,char}，{java,unit-testing,mocking,mockito,void}**等标签组合收到了最多的赞同票
+
+     ![image-20230523203235514](C:\Users\jimmylaw21\AppData\Roaming\Typora\typora-user-images\image-20230523203235514.png)
 
      **{java,string,date,time,data-conversion}，{java,http,httprequest,httpurlconnection,urlconnection}，{java,jvm,out-of-memory,heap-memory}**等标签组合收到了最多的浏览量
 
-     这可能反映出目前最受欢迎的技术或话题。
+     ![image-20230523203251832](C:\Users\jimmylaw21\AppData\Roaming\Typora\typora-user-images\image-20230523203251832.png)
+
+     这可能反映出目前最受欢迎的技术或话题。结合上述数据，最受欢迎的tag大多与java的基础语法和机制相关，体现出java提问用户的不同技能水平的人数分布由入门向精通递减，入门者居多。
 
    - **用户参与度**
 
@@ -160,21 +236,22 @@
 
      最活跃的用户有**[Basil Bourque, user207421, Holger, Jon Skeet, Stephen C, Peter Mortensen, Thorbj&#248;rn Ravn Andersen, Peter Lawrey, supercat]**
 
-     [此处插入分布图]
+     ![image-20230523225705123](C:\Users\jimmylaw21\AppData\Roaming\Typora\typora-user-images\image-20230523225705123.png)
 
    - **频繁讨论的Java API**
 
      通过使用`JavaApiIdentifier`类，我们可以从Java代码片段中识别出使用的Java API。我们对这些API的使用情况进行了统计，发现了在Stack Overflow上经常讨论的Java API。这可能反映了当前Java开发者的偏好和主流的开发实践。
-
+     
+     ![image-20230523222447611](C:\Users\jimmylaw21\AppData\Roaming\Typora\typora-user-images\image-20230523222447611.png)
    
-
-   
-
    以上的发现和见解为我们提供了对Stack Overflow数据的深入理解，并可能对我们的进一步研究和分析提供有价值的参考。我们将继续深入分析和研究这些数据，以获取更多的洞察和发现。
 
-   - 结果的解释和讨论
+5. ### **数据分析结果**	
 
-6. **结论**
+根据对Stack Overflow数据集的深入研究和数据分析，我们得到了以下重要的发现：
 
-   - 总结项目的主要发现和结果
-   - 对未来工作的建议和改进
+1. **大多数问题得到了正确答案的接受：** 通过分析问题的回答情况，我们发现大多数问题都得到了至少一个正确答案的接受。这反映出Stack Overflow社区的活跃性和用户之间的互动性。用户在寻求解决问题时，能够获得有价值的回答，从而解决他们的技术疑问。
+2. **2015年以后问题回答数的平均值和最大值差距缩小：** 通过分析问题回答数的统计数据，我们观察到2015年以后的问题回答数平均值和最大值之间的差距急剧缩小。这表明每个问题的回答数趋于平均分布，而不再出现极端的情况。这可能是因为随着时间的推移，用户对问题的回答更加均衡和全面，提供了更多的帮助和见解，使得问题回答数的分布更加平稳。
+3. **与Java基础语法和基础机制相关的问题居多：** 通过分析问题标签，我们发现大多数问题与Java的基础语法和基础机制有关。标签如"exception"、"multithreading"、"linked list"、"hashmap"等经常与Java标签一起出现。这反映出在Stack Overflow上提问的用户中，以入门者居多，他们对Java语言的基础知识和常见问题有较高的需求。这也说明了Stack Overflow作为Java开发社区的重要性，为初学者提供了解答疑惑和学习的宝贵资源。
+
+综上所述，通过数据分析，我们得出了以下重要结论：大多数问题获得了正确答案的接受，2015年以后问题回答数趋于平均，大多数问题与Java的基础语法和基础机制有关。这些发现对于理解Stack Overflow的用户行为、技术需求和社区动态具有重要意义。它们为开发者提供了宝贵的见解，使他们能够更好地利用Stack Overflow的资源和知识来解决技术问题。

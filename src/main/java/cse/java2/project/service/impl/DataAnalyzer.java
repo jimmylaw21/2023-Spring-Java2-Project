@@ -41,36 +41,36 @@ public class DataAnalyzer implements DataAnalyzerIntf {
 
   @Override
   public String getPercentageOfQuestionsWithoutAnswers() {
-    double questionWithoutAnswersCount=0;
+    double questionWithoutAnswersCount = 0;
     List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
     for (Question question : allQuestions) {
-      if (question.getAnswerCount()==0) {
+      if (question.getAnswerCount() == 0) {
         questionWithoutAnswersCount++;
       }
     }
-    double questionCount=allQuestions.size();
-    double other=questionCount-questionWithoutAnswersCount;
-    return questionWithoutAnswersCount+" "+other;
+    double questionCount = allQuestions.size();
+    double other = questionCount - questionWithoutAnswersCount;
+    return questionWithoutAnswersCount + " " + other;
   }
 
   @Override
   //平均每个问题（thread）有多少条回答
   public double getAverageNumberOfAnswers() {
     List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
-    double answerTotalNumber=0;
+    double answerTotalNumber = 0;
     for (Question question : allQuestions) {
-      answerTotalNumber+=question.getAnswerCount();
+      answerTotalNumber += question.getAnswerCount();
     }
-    return answerTotalNumber/allQuestions.size();
+    return answerTotalNumber / allQuestions.size();
   }
 
   @Override
   public int getMaximumNumberOfAnswers() {
     List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
-    int maxAnswerCount=0;
+    int maxAnswerCount = 0;
     for (Question question : allQuestions) {
-      if (question.getAnswerCount()>maxAnswerCount) {
-        maxAnswerCount=question.getAnswerCount();
+      if (question.getAnswerCount() > maxAnswerCount) {
+        maxAnswerCount = question.getAnswerCount();
       }
     }
     return maxAnswerCount;
@@ -80,8 +80,8 @@ public class DataAnalyzer implements DataAnalyzerIntf {
   //平均每个问题（thread）有多少条回答
   public Map<Integer, Double> getAverageNumberDistributionOfAnswers() {//按年份分布，年份由问题的创建时间确定
     List<Question> questions = stackOverflowThreadMapper.getAllQuestions();
-    Map<Integer,List<Integer>> questionEveryYear=new HashMap<>();
-    for(Question question: questions){
+    Map<Integer, List<Integer>> questionEveryYear = new HashMap<>();
+    for (Question question : questions) {
       long timestamp = question.getCreationDate();
       // 将时间戳转换为LocalDateTime对象
       LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.systemDefault());
@@ -90,25 +90,25 @@ public class DataAnalyzer implements DataAnalyzerIntf {
       questionEveryYear.computeIfAbsent(year, k -> new ArrayList<>());
       questionEveryYear.get(year).add(question.getAnswerCount());
     }
-    Map<Integer,Double> avgDistribution=new HashMap<>();
-    for (int year:questionEveryYear.keySet()){
+    Map<Integer, Double> avgDistribution = new HashMap<>();
+    for (int year : questionEveryYear.keySet()) {
       double sum = questionEveryYear.get(year).stream()
-              .reduce(0, Integer::sum);
-      avgDistribution.put(year,sum/questionEveryYear.get(year).size());
+          .reduce(0, Integer::sum);
+      avgDistribution.put(year, sum / questionEveryYear.get(year).size());
     }
-    avgDistribution= avgDistribution.entrySet()
-            .stream()
-            .sorted(Map.Entry.comparingByKey())
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+    avgDistribution = avgDistribution.entrySet()
+        .stream()
+        .sorted(Map.Entry.comparingByKey())
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+            (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     return avgDistribution;
   }
 
   @Override
   public Map<Integer, Integer> getMaximumNumberDistributionOfAnswers() {//按年份分布
-    List<Question> questions=stackOverflowThreadMapper.getAllQuestions();
-    Map<Integer,List<Integer>> questionEveryYear=new HashMap<>();
-    for(Question question: questions){
+    List<Question> questions = stackOverflowThreadMapper.getAllQuestions();
+    Map<Integer, List<Integer>> questionEveryYear = new HashMap<>();
+    for (Question question : questions) {
       long timestamp = question.getCreationDate();
       // 将时间戳转换为LocalDateTime对象
       LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.systemDefault());
@@ -117,34 +117,34 @@ public class DataAnalyzer implements DataAnalyzerIntf {
       questionEveryYear.computeIfAbsent(year, k -> new ArrayList<>());
       questionEveryYear.get(year).add(question.getAnswerCount());
     }
-    Map<Integer,Integer> maxDistribution = new HashMap<>();
-    for (int year:questionEveryYear.keySet()){
-      int max= Collections.max(questionEveryYear.get(year));
-      maxDistribution.put(year,max);
+    Map<Integer, Integer> maxDistribution = new HashMap<>();
+    for (int year : questionEveryYear.keySet()) {
+      int max = Collections.max(questionEveryYear.get(year));
+      maxDistribution.put(year, max);
     }
     maxDistribution = maxDistribution.entrySet()
-            .stream()
-            .sorted(Map.Entry.comparingByKey())
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        .stream()
+        .sorted(Map.Entry.comparingByKey())
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+            (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     return maxDistribution;
   }
 
   @Override
   public Map<Integer, Integer> getDistributionOfNumberOfAnswers() {
     Map<Integer, Integer> answerEveryYear = new HashMap<>();
-    List<Answer> answers=stackOverflowThreadMapper.getAllAnswers();
-    for(Answer answer:answers){
-      long time=answer.getCreationDate();
-      LocalDateTime dateTime=LocalDateTime.ofInstant(Instant.ofEpochSecond(time), ZoneId.systemDefault());
+    List<Answer> answers = stackOverflowThreadMapper.getAllAnswers();
+    for (Answer answer : answers) {
+      long time = answer.getCreationDate();
+      LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(time), ZoneId.systemDefault());
       // 获取年份
       int year = dateTime.getYear();
-      answerEveryYear.put(year,answerEveryYear.getOrDefault(year,0)+1);
+      answerEveryYear.put(year, answerEveryYear.getOrDefault(year, 0) + 1);
       answerEveryYear = answerEveryYear.entrySet()
-              .stream()
-              .sorted(Map.Entry.comparingByKey())
-              .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                      (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+          .stream()
+          .sorted(Map.Entry.comparingByKey())
+          .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+              (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
     return answerEveryYear;
   }
@@ -152,17 +152,17 @@ public class DataAnalyzer implements DataAnalyzerIntf {
   @Override
   public String getPercentageOfQuestionsWithAcceptedAnswers() {
     List<Integer> questionIds = stackOverflowThreadMapper.getAllQuestionIds();
-    double acceptedAnswerCount=0;
+    double acceptedAnswerCount = 0;
     for (Integer questionId : questionIds) {
       List<Answer> answers = stackOverflowThreadMapper.getAnswersByQuestionId(questionId);
       for (Answer answer : answers) {
-        if(answer.isAccepted()){
+        if (answer.isAccepted()) {
           acceptedAnswerCount++;//one question could only have one accepted answer
         }
       }
     }
-    double other=questionIds.size()-acceptedAnswerCount;
-    return acceptedAnswerCount+" "+other;
+    double other = questionIds.size() - acceptedAnswerCount;
+    return acceptedAnswerCount + " " + other;
 
   }
 
@@ -186,46 +186,46 @@ public class DataAnalyzer implements DataAnalyzerIntf {
     for (long time : questionResolutionTime.keySet()) {
       boolean flag = false;
       for (int i = 1; i < 50; i++) {
-        if (time < i * 200){
-            questionResolutionTime2.put(i * 200, questionResolutionTime2.getOrDefault(i * 200, 0) + questionResolutionTime.get(time));
-            flag = true;
-            break;
+        if (time < i * 200) {
+          questionResolutionTime2.put(i * 200, questionResolutionTime2.getOrDefault(i * 200, 0) + questionResolutionTime.get(time));
+          flag = true;
+          break;
         }
       }
-        if (!flag) {
-            questionResolutionTime2.put(10000, questionResolutionTime2.getOrDefault(10000, 0) + questionResolutionTime.get(time));
-        }
+      if (!flag) {
+        questionResolutionTime2.put(10000, questionResolutionTime2.getOrDefault(10000, 0) + questionResolutionTime.get(time));
+      }
     }
     //将map按照key排序
     questionResolutionTime2 = questionResolutionTime2.entrySet()
-            .stream()
-            .sorted(Map.Entry.comparingByKey())
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        .stream()
+        .sorted(Map.Entry.comparingByKey())
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+            (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     return questionResolutionTime2;
   }
 
 
   @Override
-  public String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvote() {
+  public String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes() {
     List<Integer> questionIds = stackOverflowThreadMapper.getAllQuestionIds();
-    double count=0;
+    double count = 0;
     for (int questionId : questionIds) {
-      int acceptedAnswerUpvote=0;
-      int otherAnswerMaxUpvote=0;
+      int acceptedAnswerUpvote = 0;
+      int otherAnswerMaxUpvote = 0;
       List<Answer> answers = stackOverflowThreadMapper.getAnswersByQuestionId(questionId);
       for (Answer answer : answers) {
         if (answer.isAccepted()) {
-          acceptedAnswerUpvote=answer.getUpVoteCount();
-        }else {
-          otherAnswerMaxUpvote=Math.max(otherAnswerMaxUpvote, answer.getUpVoteCount());
+          acceptedAnswerUpvote = answer.getUpVoteCount();
+        } else {
+          otherAnswerMaxUpvote = Math.max(otherAnswerMaxUpvote, answer.getUpVoteCount());
         }
       }
-      if(acceptedAnswerUpvote!=0&&acceptedAnswerUpvote<otherAnswerMaxUpvote){
+      if (acceptedAnswerUpvote != 0 && acceptedAnswerUpvote < otherAnswerMaxUpvote) {
         count++;
       }
     }
-    return count+" "+(questionIds.size()-count);
+    return count + " " + (questionIds.size() - count);
   }
 
   @Override
@@ -233,10 +233,10 @@ public class DataAnalyzer implements DataAnalyzerIntf {
     List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
 
     return allQuestions.stream()
-            .filter(q -> q.getTags().contains("java"))
-            .flatMap(q -> q.getTags().stream())
-            .filter(tag -> !tag.equals("java"))
-            .collect(Collectors.groupingBy(Function.identity(), Collectors.summingInt(e -> 1)));
+        .filter(q -> q.getTags().contains("java"))
+        .flatMap(q -> q.getTags().stream())
+        .filter(tag -> !tag.equals("java"))
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.summingInt(e -> 1)));
   }
 
   @Override
@@ -244,10 +244,10 @@ public class DataAnalyzer implements DataAnalyzerIntf {
     List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
 
     return allQuestions.stream()
-            .collect(Collectors.toMap(
-                    q -> String.join(",", q.getTags()),
-                    Question::getUpVoteCount,
-                    Integer::sum));
+        .collect(Collectors.toMap(
+            q -> String.join(",", q.getTags()),
+            Question::getUpVoteCount,
+            Integer::sum));
   }
 
 
@@ -256,10 +256,10 @@ public class DataAnalyzer implements DataAnalyzerIntf {
     List<Question> allQuestions = stackOverflowThreadMapper.getAllQuestions();
 
     return allQuestions.stream()
-            .collect(Collectors.toMap(
-                    q -> String.join(",", q.getTags()),
-                    Question::getViewCount,
-                    Integer::sum));
+        .collect(Collectors.toMap(
+            q -> String.join(",", q.getTags()),
+            Question::getViewCount,
+            Integer::sum));
   }
 
 
@@ -271,18 +271,18 @@ public class DataAnalyzer implements DataAnalyzerIntf {
     for (Integer questionId : questionIds) {
       List<String> participants = stackOverflowThreadMapper.getParticipantsByQuestionId(questionId);
       List<Answer> answers = stackOverflowThreadMapper.getAnswersByQuestionId(questionId);
-      List<Comment> comments=stackOverflowThreadMapper.getCommentsByQuestionId(questionId);
-      List<String> answersParticipants=new ArrayList<>() ;
-      for(Answer answer:answers){
+      List<Comment> comments = stackOverflowThreadMapper.getCommentsByQuestionId(questionId);
+      List<String> answersParticipants = new ArrayList<>();
+      for (Answer answer : answers) {
         answersParticipants.addAll(stackOverflowThreadMapper.getParticipantsByAnswerId(answer.getAnswerId()));
       }
-      answersParticipants=new ArrayList<>(new HashSet<>(answersParticipants));
-      List<String> commentParticipants=new ArrayList<>() ;
-      for (Comment comment:comments){
+      answersParticipants = new ArrayList<>(new HashSet<>(answersParticipants));
+      List<String> commentParticipants = new ArrayList<>();
+      for (Comment comment : comments) {
         commentParticipants.addAll(stackOverflowThreadMapper.getParticipantsByCommentId(comment.getCommentId()));
       }
-      commentParticipants=new ArrayList<>(new HashSet<>(commentParticipants));
-      threadParticipationCount.add(participants.size()+" "+answersParticipants.size()+" "+commentParticipants.size());
+      commentParticipants = new ArrayList<>(new HashSet<>(commentParticipants));
+      threadParticipationCount.add(participants.size() + " " + answersParticipants.size() + " " + commentParticipants.size());
     }
 
     return threadParticipationCount;
@@ -296,8 +296,8 @@ public class DataAnalyzer implements DataAnalyzerIntf {
     List<String> mostActiveUsers = new ArrayList<>();
 
     for (Map<String, Object> userData : mostActiveUsersData) {
-      String s=stackOverflowThreadMapper.getDisplayNameByOwnerId((String) userData.get("owner_id"));
-      if(s!=null) {
+      String s = stackOverflowThreadMapper.getDisplayNameByOwnerId((String) userData.get("owner_id"));
+      if (s != null) {
         mostActiveUsers.add(s);
       }
     }

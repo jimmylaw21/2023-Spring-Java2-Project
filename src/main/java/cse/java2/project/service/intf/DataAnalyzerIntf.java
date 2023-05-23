@@ -2,6 +2,7 @@ package cse.java2.project.service.intf;
 
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public interface DataAnalyzerIntf {
   // Accepted Answers
   String getPercentageOfQuestionsWithAcceptedAnswers();
   Map<Integer, Integer> getDistributionOfQuestionResolutionTime();
-  String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvote();
+  String getPercentageOfQuestionsWithNonAcceptedAnswersHavingMoreUpvotes();
 
   // Tags
   Map<String, Integer> getFrequentTagsWithJava();

@@ -154,19 +154,19 @@ public class Answer implements Serializable {
 
   //比较两个Answer对象的awswerId是否相等
   @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (this == obj) {
-            return true;
-        }
-        if (obj instanceof Answer) {
-            Answer answer = (Answer) obj;
-            return this.answerId == answer.answerId;
-        }
-        return false;
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
     }
+    if (this == obj) {
+      return true;
+    }
+    if (obj instanceof Answer) {
+      Answer answer = (Answer) obj;
+      return this.answerId == answer.answerId;
+    }
+    return false;
+  }
 
   @Override
   public int hashCode() {
@@ -175,21 +175,21 @@ public class Answer implements Serializable {
 
 
   @Override
-    public String toString() {
-        return "Answer{" +
-                "owner=" + owner +
-                ", downVoteCount=" + downVoteCount +
-                ", upVoteCount=" + upVoteCount +
-                ", isAccepted=" + isAccepted +
-                ", score=" + score +
-                ", lastActivityDate=" + lastActivityDate +
-                ", lastEditDate=" + lastEditDate +
-                ", creationDate=" + creationDate +
-                ", answerId=" + answerId +
-                ", questionId=" + questionId +
-                ", link='" + link + '\'' +
-                ", title='" + title + '\'' +
-                ", body='" + body + '\'' +
-                '}';
-    }
+  public String toString() {
+    return "Answer{" +
+        "owner=" + owner +
+        ", downVoteCount=" + downVoteCount +
+        ", upVoteCount=" + upVoteCount +
+        ", isAccepted=" + isAccepted +
+        ", score=" + score +
+        ", lastActivityDate=" + lastActivityDate +
+        ", lastEditDate=" + lastEditDate +
+        ", creationDate=" + creationDate +
+        ", answerId=" + answerId +
+        ", questionId=" + questionId +
+        ", link='" + link + '\'' +
+        ", title='" + title + '\'' +
+        ", body='" + body + '\'' +
+        '}';
+  }
 }
