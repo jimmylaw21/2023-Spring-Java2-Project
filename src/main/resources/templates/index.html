@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <title>政务大数据共享交换平台</title>
 	<script src="/js/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js" integrity="sha256-PRbDoi//4nBAaq7sIfxyRT3anw7tVuazUIAyHkk1Y5M=" crossorigin="anonymous"></script>
+	<script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
 	<link href='../static/css/test-1024.css' rel='stylesheet' type='text/css'>
 	<script type="text/javascript" src="/js/test-1024.js"></script>
 </head>
@@ -270,8 +271,8 @@
 							radius: '45%',
 							center: ['50%', '50%'],
 							data: [
-								{value: parseInt(values[0]), name: '有answer的问题'},
-								{value: parseInt(values[1]), name: '没有answer的问题'},
+								{value: parseInt(values[0]), name: '没有answer的问题'},
+								{value: parseInt(values[1]), name: '有answer的问题'},
 							],
 							itemStyle: {
 								emphasis: {
@@ -615,29 +616,21 @@
 			}
 		});
 	}
-	let java_data ;
-	let upvotes_data ;
-	let view_data ;
+	var java_data =new Map() ;
+	var upvotes_data =new Map();
+	var view_data =new Map() ;
 
-	getWithJavaTags(function (data1) {
-		java_data = data1;
-	});
-
-	getUpvoteTags(function (data) {
-		upvotes_data = data;
-	});
-
-	getViewTags(function (data) {
-		view_data = data;
-	});
-	let wordcloudData =[];
-	function initWordcloud(data) {
-
-		for (let [key,value] of data.entries()) {
-			wordcloudData.push({
-				name: key,
-				value: value
-			});
+	function initWordcloud(data1) {
+		var key = Object.keys(data1);
+		var value = key.map(function (k) {
+			return data1[k];
+		});
+		var values = [];
+		for (var j = 0; j < key.length; j++) {
+			values.push({
+				'name':key[j],
+				'value':value[j]
+			})
 		}
 		option = {
 			tooltip: {trigger: 'axis',
@@ -688,9 +681,7 @@
 						shadowColor: '#333'
 					}
 				},
-				data: wordcloudData.sort(function (a, b) {
-					return b.value - a.value;
-				})
+				data: values
 			}]
 		};
 		myChart3.setOption(option);
@@ -699,10 +690,19 @@
 	function urlType() {
 		resourceDataType = $('.data-label li.active').data('type');
 		if (resourceDataType === 1) {
+			getWithJavaTags(function (data1) {
+				java_data = data1;
+			});
 			initWordcloud(java_data);
 		} else if (resourceDataType === 2) {
+			getUpvoteTags(function (data) {
+				upvotes_data = data;
+			});
 			initWordcloud(upvotes_data);
 		} else if (resourceDataType === 3) {
+			getViewTags(function (data) {
+				view_data = data;
+			});
 			initWordcloud( view_data);
 		}
 	}
