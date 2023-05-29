@@ -2,9 +2,12 @@ package cse.java2.project.service.impl;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import cse.java2.project.mapper.StackOverflowThreadMapper;
 import cse.java2.project.service.intf.JavaApiIdentifierIntf;
 import org.apache.ibatis.io.Resources;
@@ -70,8 +73,29 @@ public class JavaApiIdentifier implements JavaApiIdentifierIntf {
       }
     }
 
+    // Match code blocks preceded by common Java keywords
+    Pattern patternKeyword = Pattern.compile("(?:import|public|class|List|Map)\\s+(.+)");
+    Matcher matcherKeyword = patternKeyword.matcher(text);
+    while (matcherKeyword.find()) {
+      String possibleJavaCode = matcherKeyword.group(1);
+      if (isJavaCode(possibleJavaCode)) {
+        codeSnippets.add(possibleJavaCode);
+      }
+    }
+
+    // Match code blocks preceded by common Java keywords
+    Pattern patternKeyword2 = Pattern.compile("(?:import|public|class|List|Map)(.*)");
+    Matcher matcherKeyword2 = patternKeyword2.matcher(text);
+    while (matcherKeyword2.find()) {
+      String possibleJavaCode = matcherKeyword2.group(1);
+      if (isJavaCode(possibleJavaCode)) {
+        codeSnippets.add(possibleJavaCode);
+      }
+    }
+
     return codeSnippets;
   }
+
 
   // Use JavaParser to check if a string is valid Java code
   private boolean isJavaCode(String text) {
@@ -105,6 +129,48 @@ public class JavaApiIdentifier implements JavaApiIdentifierIntf {
     return classNamesAndMethodNames;
   }
 
+  private static Map<String, Integer> findAPI(List<String> bodies, Map<String, Integer> api) {
+
+    for (String body : bodies) {
+//      System.out.println(body);
+      // 用JavaParser解析代码片段
+      JavaParser javaParser = new JavaParser(
+              new ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_8)
+                      .setStoreTokens(true));
+      ParseResult<CompilationUnit> parseResult = javaParser.parse(body);
+      if (parseResult.isSuccessful()) {
+        CompilationUnit cu = parseResult.getResult().get();
+
+        // 使用Visitor模式遍历AST并找出所有方法声明
+        cu.accept(new VoidVisitorAdapter<Void>() {
+          @Override
+          public void visit(MethodDeclaration md, Void arg) {
+            super.visit(md, arg);
+            api.put(md.getNameAsString(), api.getOrDefault(md.getNameAsString(), 0) + 1);
+          }
+        }, null);
+
+        // 使用Visitor模式遍历AST并找出所有类声明
+        cu.accept(new VoidVisitorAdapter<Void>() {
+          @Override
+          public void visit(ClassOrInterfaceDeclaration cid, Void arg) {
+            super.visit(cid, arg);
+            api.put(cid.getNameAsString(), api.getOrDefault(cid.getNameAsString(), 0) + 1);
+          }
+        }, null);
+
+        // 遍历所有的import声明
+        for (ImportDeclaration importDeclaration : cu.getImports()) {
+          api.put(importDeclaration.getNameAsString(),
+                  api.getOrDefault(importDeclaration.getNameAsString(), 0) + 1);
+        }
+
+      }
+    }
+    return api;
+  }
+
+
 
   @Override
   public Map<String, Integer> getMostUsedJavaApi() {
@@ -121,22 +187,36 @@ public class JavaApiIdentifier implements JavaApiIdentifierIntf {
     allBodies.addAll(answerBodies);
     allBodies.addAll(commentBodies);
 
-    for (String body : allBodies) {
-      List<String> codeSnippets = extractCodeSnippets(body);
-      for (String codeSnippet : codeSnippets) {
-        List<String> classNamesAndMethodNames = extractClassAndMethodNames(codeSnippet);
-//        List<String> classNamesAndMethodNames = extractClassAndMethodNames(body);
-        for (String name : classNamesAndMethodNames) {
-          apiCounts.put(name, apiCounts.getOrDefault(name, 0) + 1);
-        }
+//    for (String body : allBodies) {
+//      List<String> codeSnippets = extractCodeSnippets(body);
+//      System.out.println(codeSnippets);
+//
+//      for (String codeSnippet : codeSnippets) {
+//        List<String> classNamesAndMethodNames = extractClassAndMethodNames(codeSnippet);
+////        List<String> classNamesAndMethodNames = extractClassAndMethodNames(body);
+//        for (String name : classNamesAndMethodNames) {
+//          apiCounts.put(name, apiCounts.getOrDefault(name, 0) + 1);
+//        }
+//      }
+//    }
+//
+//    // Sort the map by value in descending order
+//    Map<String, Integer> sortedApiCounts = apiCounts.entrySet().stream()
+//        .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+//        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+    Map<String, Integer> sortedApiCounts = findAPI(allBodies, apiCounts);
+    //拆分String里的每个单词，String里的单词之间会用.隔开
+    Map<String, Integer> sortedApiCounts2 = new HashMap<>();
+    for (Map.Entry<String, Integer> entry : sortedApiCounts.entrySet()) {
+      String[] words = entry.getKey().split("\\.");
+      for (String word : words) {
+        sortedApiCounts2.put(word, sortedApiCounts2.getOrDefault(word, 0) + entry.getValue());
       }
     }
 
-    // Sort the map by value in descending order
-    Map<String, Integer> sortedApiCounts = apiCounts.entrySet().stream()
-        .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
-    return sortedApiCounts;
+
+    return sortedApiCounts2;
   }
 }

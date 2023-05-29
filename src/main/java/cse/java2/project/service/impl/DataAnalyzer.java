@@ -282,6 +282,10 @@ public class DataAnalyzer implements DataAnalyzerIntf {
         commentParticipants.addAll(stackOverflowThreadMapper.getParticipantsByCommentId(comment.getCommentId()));
       }
       commentParticipants = new ArrayList<>(new HashSet<>(commentParticipants));
+      //把两者放进一个list里面，然后去重
+        participants.addAll(answersParticipants);
+        participants.addAll(commentParticipants);
+        participants = new ArrayList<>(new HashSet<>(participants));
       threadParticipationCount.add(participants.size() + " " + answersParticipants.size() + " " + commentParticipants.size());
     }
 

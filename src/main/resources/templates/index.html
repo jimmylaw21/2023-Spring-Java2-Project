@@ -2,12 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>政务大数据共享交换平台</title>
-	<script src="/js/jquery.min.js"></script>
-	<script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
-	<script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
-	<link href='../static/css/test-1024.css' rel='stylesheet' type='text/css'>
-	<script type="text/javascript" src="/js/test-1024.js"></script>
+    <title>StackOverflow DataAnalyzer</title>
+    <script src="/js/jquery.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
+    <link href='../static/css/test-1024.css' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="/js/test-1024.js"></script>
 </head>
 
 <body>
@@ -24,142 +24,142 @@
 </div>
 <div class="container-content">
     <div class="top">
-		<div class="count-base" >
-			<div class="com-count-title">已回答的问题数</div>
-			<div class="com-screen-content">
-				<div id="main1" style="width:100%;height:150px;"></div>
-				<div class="horizontal-container">
-					<div id="main1-1" style="width:50%;height:150px;"></div>
-					<div id="main1-2" style="width:50%;height:150px;"></div>
-				</div>
-			</div>
-			<span class="left-top"></span>
-			<span class="right-top"></span>
-			<span class="left-bottom"></span>
-			<span class="right-bottom"></span>
-		</div>
-		<div class="count-resource q1">
-			<div class="com-count-title">回答数</div>
-			<div class="com-screen-content2">
-				<ul class="use-data">
-					<li>
-						<p id="averageValue" class="data-count"></p>
-						<span class="data-name">总平均值</span>
-					</li>
-					<li>
-						<p id="maxValue" class="data-count"></p>
-						<span class="data-name">总最大值</span>
-					</li>
-				</ul>
-				<div class="com-screen-content">
-				 <div id="main2" style="margin-top:10px;width:100%;height:240px;"></div>
-				</div>
-				<span class="left-top"></span>
-				<span class="right-top"></span>
-				<span class="left-bottom"></span>
-				<span class="right-bottom"></span>
-			</div>
-		</div>
-		<div class="count-resource q2">
-			<div class="com-count-title">tags</div>
-			
-				
-			<div class="com-screen-content">
-				<ul class="data-label">
-					<li class="active" data-type="1">和"java"一起出现</li>
-					<li data-type="2">最多upvotes</li>
-					<li data-type="3">最多views</li>
-				</ul>
-			   <div id="main3" style="margin-top:10px;width:100%;height:240px;"></div>
-			</div>
-			<span class="left-top"></span>
-			<span class="right-top"></span>
-			<span class="left-bottom"></span>
-			<span class="right-bottom"></span>
-		</div>
+        <div class="count-base">
+            <div class="com-count-title">已回答的问题数</div>
+            <div class="com-screen-content">
+                <div id="main1" style="width:100%;height:150px;"></div>
+                <div class="horizontal-container">
+                    <div id="main1-1" style="width:50%;height:150px;"></div>
+                    <div id="main1-2" style="width:50%;height:150px;"></div>
+                </div>
+            </div>
+            <span class="left-top"></span>
+            <span class="right-top"></span>
+            <span class="left-bottom"></span>
+            <span class="right-bottom"></span>
+        </div>
+        <div class="count-resource q1">
+            <div class="com-count-title">回答数</div>
+            <div class="com-screen-content2">
+                <ul class="use-data">
+                    <li>
+                        <p id="averageValue" class="data-count"></p>
+                        <span class="data-name">总平均值</span>
+                    </li>
+                    <li>
+                        <p id="maxValue" class="data-count"></p>
+                        <span class="data-name">总最大值</span>
+                    </li>
+                </ul>
+                <div class="com-screen-content">
+                    <div id="main2" style="margin-top:10px;width:100%;height:240px;"></div>
+                </div>
+                <span class="left-top"></span>
+                <span class="right-top"></span>
+                <span class="left-bottom"></span>
+                <span class="right-bottom"></span>
+            </div>
+        </div>
+        <div class="count-resource q2">
+            <div class="com-count-title">tags</div>
+
+
+            <div class="com-screen-content">
+                <ul class="data-label">
+                    <li class="active" data-type="1">和"java"一起出现</li>
+                    <li data-type="2">最多upvotes</li>
+                    <li data-type="3">最多views</li>
+                </ul>
+                <div id="main3" style="margin-top:10px;width:100%;height:240px;"></div>
+            </div>
+            <span class="left-top"></span>
+            <span class="right-top"></span>
+            <span class="left-bottom"></span>
+            <span class="right-bottom"></span>
+        </div>
     </div>
-	<div class="mid">
-		<div class="count-share w1" >
-			<div class="com-count-title">活跃用户</div>
-			<div class="com-screen-content">
-				    <div class="topRec_List">
-						<dl>
-							<dd>参与 java thread 讨论最活跃的6个用户</dd>
-						</dl>
-						<div class="maquee">
-							<ul>
-								<li>
-									<div id="dynamicText1"></div>
-								</li> 
-								<li>
-									<div id="dynamicText2"></div>
-								</li> 
-								<li>
-									<div id="dynamicText3"></div>
-								</li> 
-								<li>		
-									<div id="dynamicText4"></div>
-								</li> 
-								<li>							
-									<div id="dynamicText5"></div>
-								</li> 
-								<li>
-									<div id="dynamicText6"></div>
-								</li>
-							</ul>
-						</div>
-					</div>
-			</div>
-			<span class="left-top"></span>
-			<span class="right-top"></span>
-			<span class="left-bottom"></span>
-			<span class="right-bottom"></span>
-		</div>
-		<div class="count-share w2" >
-			<div class="com-count-title">在 Stack Overflow 上最频繁被讨论的Java APIs</div>
-			<div class="com-screen">
-				<div id="main1-3" style="width:100%;height:300px;"></div>
-			</div>
-			<span class="left-top"></span>
-			<span class="right-top"></span>
-			<span class="left-bottom"></span>
-			<span class="right-bottom"></span>
-		</div>
-		<div class="count-share w3">
-			<div class="com-count-title">问题提出到解决的时间间隔</div>
-			<div class="com-screen-content">
-				<div id="main5" style="width:100%;height:300px;"></div>
-			</div>
-			<span class="left-top"></span>
-			<span class="right-top"></span>
-			<span class="left-bottom"></span>
-			<span class="right-bottom"></span>
-		</div>
-	</div>
-	
-	<div class="bottom">
-		<div class="count-topic e1" >
-			<div class="com-count-title">用户参与java thread讨论的分布</div>
-			<div class="com-screen-content">
-			<div id="main6" style="width:100%;height:300px;"></div>
-			</div>
-			<span class="left-top"></span>
-			<span class="right-top"></span>
-			<span class="left-bottom"></span>
-			<span class="right-bottom"></span>
-		</div>
-		<div class="count-topic e2" >
-			<div class="com-count-title">answers分布</div>
-			<div class="com-screen-content">
-			 <div id="main7" style="width:100%;height:300px;"></div>
-			</div>
-			<span class="left-top"></span>
-			<span class="right-top"></span>
-			<span class="left-bottom"></span>
-			<span class="right-bottom"></span>
-		</div>
-	</div>
-	<div class="clearfix"></div>
+    <div class="mid">
+        <div class="count-share w1">
+            <div class="com-count-title">活跃用户</div>
+            <div class="com-screen-content">
+                <div class="topRec_List">
+                    <dl>
+                        <dd>参与 java thread 讨论最活跃的6个用户(参与讨论次数最多)</dd>
+                    </dl>
+                    <div class="maquee">
+                        <ul>
+                            <li>
+                                <div id="dynamicText1"></div>
+                            </li>
+                            <li>
+                                <div id="dynamicText2"></div>
+                            </li>
+                            <li>
+                                <div id="dynamicText3"></div>
+                            </li>
+                            <li>
+                                <div id="dynamicText4"></div>
+                            </li>
+                            <li>
+                                <div id="dynamicText5"></div>
+                            </li>
+                            <li>
+                                <div id="dynamicText6"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <span class="left-top"></span>
+            <span class="right-top"></span>
+            <span class="left-bottom"></span>
+            <span class="right-bottom"></span>
+        </div>
+        <div class="count-share w2">
+            <div class="com-count-title">在 Stack Overflow 上最频繁被讨论的Java APIs</div>
+            <div class="com-screen">
+                <div id="main1-3" style="width:100%;height:300px;"></div>
+            </div>
+            <span class="left-top"></span>
+            <span class="right-top"></span>
+            <span class="left-bottom"></span>
+            <span class="right-bottom"></span>
+        </div>
+        <div class="count-share w3">
+            <div class="com-count-title">问题提出到解决的时间间隔(y轴：个数/x轴：秒)</div>
+            <div class="com-screen-content">
+                <div id="main5" style="width:100%;height:300px;"></div>
+            </div>
+            <span class="left-top"></span>
+            <span class="right-top"></span>
+            <span class="left-bottom"></span>
+            <span class="right-bottom"></span>
+        </div>
+    </div>
+
+    <div class="bottom">
+        <div class="count-topic e1">
+            <div class="com-count-title">用户参与java thread讨论的分布</div>
+            <div class="com-screen-content">
+                <div id="main6" style="width:100%;height:300px;"></div>
+            </div>
+            <span class="left-top"></span>
+            <span class="right-top"></span>
+            <span class="left-bottom"></span>
+            <span class="right-bottom"></span>
+        </div>
+        <div class="count-topic e2">
+            <div class="com-count-title">answers分布</div>
+            <div class="com-screen-content">
+                <div id="main7" style="width:100%;height:300px;"></div>
+            </div>
+            <span class="left-top"></span>
+            <span class="right-top"></span>
+            <span class="left-bottom"></span>
+            <span class="right-bottom"></span>
+        </div>
+    </div>
+    <div class="clearfix"></div>
 </div>
 
 <script type="text/javascript">
@@ -168,6 +168,7 @@
 	    document.write("<link href='/css/test-1024.css' rel='stylesheet' type='text/css'>");
 
 		document.writeln("<script type=\"text/javascript\" src=\"/js/test-1024.js\"><\/script>");
+
 
 </script>
 <!--大屏-->
@@ -198,6 +199,7 @@
 			  }
 		  });
 	  }
+
 </script>
 //三个饼状图
 <script>
@@ -253,6 +255,7 @@
 	// 初始加载图表并定时更新
 	updateChart();
 	setInterval(updateChart, 50000); // 每5秒更新一次图表
+
 </script>
 <script>
 	var myChart1_1=echarts.init(document.getElementById('main1-1'));
@@ -307,6 +310,7 @@
 	// 初始加载图表并定时更新
 	updateChart();
 	setInterval(updateChart, 50000); // 每5秒更新一次图表
+
 </script>
 <script>
 	var myChart1_2=echarts.init(document.getElementById('main1-2'));
@@ -328,7 +332,7 @@
 							radius: '45%',
 							center: ['50%', '50%'],
 							data: [
-								{value: parseInt(values[0]), name: '含有 non-accepted answer 的 upvote 数高于 accepted answer 的问题'},
+								{value: parseInt(values[0]), name: '含有non-accepted answer的upvote数高于accepted answer的问题'},
 								{value: parseInt(values[1]), name: '其他'},
 							],
 							itemStyle: {
@@ -361,6 +365,7 @@
 	// 初始加载图表并定时更新
 	updateChart1_2();
 	setInterval(updateChart1_2, 5000); // 每5秒更新一次图表
+
 </script>
 //显示最大值和平均值
 <script>
@@ -400,6 +405,7 @@
 	}
 	updateValues();
 	setInterval(updateValues, 50000); // 每5秒更新一次图表
+
 </script>
 //显示最大值和平均值的分布图
 <script>
@@ -591,6 +597,7 @@
 	// 初始加载图表并定时更新
 	updateChart2();
 	setInterval(updateChart2, 50000); // 每5秒更新一次图表
+
 </script>
 //tags三个词云
 <script>
@@ -734,8 +741,9 @@
 		oTimer = setInterval(resourceType, 3000);
 	});
 
+
 </script>
-//问题提出到解决的时间间隔分布
+//问题提出到解决的时间间隔分布(单位：秒)
 <script>
 
 	var myChart5 = echarts.init(document.getElementById('main5'));
@@ -792,6 +800,7 @@
 	}
 	updateChart5();
 	setInterval(updateChart5, 50000);
+
 </script>
 //用户参与讨论的分布
 <script>
@@ -944,6 +953,7 @@
 // 使用刚指定的配置项和数据显示图表。
 		myChart6.setOption(option);
 	}
+
 </script>
 //answer分布
 <script>
@@ -1166,6 +1176,7 @@
 // 使用刚指定的配置项和数据显示图表。
 		myChart7.setOption(option);
 	}
+
 </script>
 //apis词云
 <script>
@@ -1205,7 +1216,7 @@
 				transitionDuration: 0,
 				backgroundColor: 'rgba(83,93,105,0.8)',
 				borderColor: '#535b69',
-				borderRadius: 8,
+				borderRadius: 15,
 				borderWidth: 2,
 				padding: [5, 10],
 				axisPointer: {
@@ -1218,11 +1229,11 @@
 			series: [{
 				type: 'wordCloud',
 				shape: {
-					cloudGrow: 0.2
+					cloudGrow: 0.3
 				},
-				sizeRange: [10, 60],
+				sizeRange: [15, 80],
 				rotationRange: [-30, 30],
-				gridSize: 2,
+				gridSize: 3,
 				drawOutOfBound: false,
 				layoutAnimation: true,
 				keepAspect: true,
@@ -1247,6 +1258,7 @@
 		};
 		myChart1_3.setOption(option);
 	}
+
 </script>
 </body>
 </html>
